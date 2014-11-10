@@ -1,0 +1,530 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+
+<head>
+
+
+<meta charset="utf-8">
+<meta http-equiv="cleartype" content="on">
+
+<title>iOS 之 UIScrollView 学习笔记 - VITO</title>
+<meta name="author" content="Vito Zhang">
+
+
+
+
+<meta name="description" content="Vito的技术博客, iOS开发, iOS学习, Design, 程序员, 开源, 分享">
+
+<meta name="keywords" content="ios Vito的技术博客, iOS开发, iOS学习, Design, 程序员, 开源, 分享">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Twitter Cards -->
+
+  
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content"">
+  
+  <meta name="twitter:title" content="iOS 之 UIScrollView 学习笔记">
+  <meta name="twitter:description" content="Vito的技术博客, iOS开发, iOS学习, Design, 程序员, 开源, 分享">
+  <meta name="twitter:creator" content="@NoairZhangwei">
+
+
+<!-- Open Graph -->
+<meta property="og:local" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://vit0.com/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji">
+<meta property="og:title" content="iOS 之 UIScrollView 学习笔记">
+<meta property="og:description" content="Vito的技术博客, iOS开发, iOS学习, Design, 程序员, 开源, 分享">
+
+  <meta property="og:image" content="">
+
+<meta property="og:site_name" content="VITO">
+
+<link rel="canonical" href="http://vit0.com/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji">
+<link href="/favicon.png" rel="icon">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="/atom.xml" rel="alternate" title="VITO" type="application/atom+xml">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+<script>Modernizr || document.write('<script src="/javascripts/vendor/modernizr-2.6.2.custom.min.js"><\/script>') </script>
+
+
+
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">菜单</button>
+	<ul class="dl-menu">
+		<li><a href="/">主页</a></li>
+		<li>
+			<a href="#">关于</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="/images/custom/vito-avatar.jpg" alt="Vito Zhang photo" class="author-photo">
+					<h4>Vito Zhang</h4>
+					<p>iOS 开发者一枚，目前就职于 Sumi Interactive。热爱生活，热爱 Coding。:]</p>
+				</li>
+				
+				<li>
+					<a href="mailto:vvitozhang@gmail.com"><i class="fa fa-envelope"></i> Email</a>
+				</li>
+				<li>
+					<a href="http://twitter.com/NoairZhangwei"><i class="fa fa-twitter"></i> Twitter</a>
+				</li>
+				
+				<li>
+					<a href="http://github.com/vitoziv"><i class="fa fa-github"></i> GitHub</a>
+				</li>
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">文章</a>
+			<ul class="dl-submenu">
+				<li><a href="/posts/">所有文章</a></li>
+				<li><a href="/categories/">所有分类</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji/" rel="bookmark" title="iOS 之 UIScrollView 学习笔记">iOS 之 UIScrollView 学习笔记</a></h1>
+        
+        <h2>October 09, 2013</h2>
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1>使用场景</h1>
+
+<p>在 iOS 中当屏幕装不下需要显示的内容时，就需要使用 Scroll views。使用Scroll views 有两个主要目的：</p>
+
+<ul>
+<li> 通过拖拽 Scroll views 的内容区域，让屏幕外的内容显示出来</li>
+<li> 使用捏合手势（pinch gestures）让内容放大或者缩小</li>
+</ul>
+
+
+<h1>概览</h1>
+
+<p> UIScrollView 类有这几个功能：</p>
+
+<ul>
+<li> 滑动 scroll view 中的内容</li>
+<li> 缩放内容，通过手势放大缩小内容</li>
+<li> 翻页模式</li>
+</ul>
+
+
+<p>UIScrollView的所有操作都是针对其subviews。</p>
+
+<h1>基础UIScrollView</h1>
+
+<p>实现一个最基础只有滑动功能的 UIScrollView 非常简单，必须步骤只有两个：</p>
+
+<ol>
+<li>设置 UIScrollView 的 contentSize 属性。这个属性代表可以滚动的区域大小。</li>
+<li>在 UIScrollView 中添加子 view。子 view 提供显示的内容。</li>
+</ol>
+
+
+<p>还有一些可选项来完善 UIScrollView 比如 vertical and horizontal scroll indicators, drag bouncing, zoom bouncing, and directional constraint of scrolling。</p>
+
+<p>在 UIScrollView 中添加一张很大的图片，然后实现拖动 UIScrollView 显示图片内容：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>  <span class="bp">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="s">@&quot;test.jpg&quot;</span><span class="p">];</span>
+</span><span class='line'>  <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">imageView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage</span><span class="p">:</span><span class="n">image</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 1. 设置 UIScrollView 的 contentSize 属性。这个属性代表可以滚动的区域大小。</span>
+</span><span class='line'>  <span class="nb">self</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">contentSize</span> <span class="o">=</span> <span class="n">imageView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 2. 在 UIScrollView 中添加子 view。子 view 提供显示的内容。</span>
+</span><span class='line'>  <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">scrollView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">imageView</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设置contentInset，bouncing，滑动方向等都比较简单就略过之…</p>
+
+<hr />
+
+<p><strong>需要注意的是:</strong></p>
+
+<pre><code>在设置UIScrollView的contentInset的时候，UIScrollView 的滚动条会变得很奇怪。
+如果想让滚动条能正常显示应该同时设置scrollIndicatorInsets。
+
+如：
+self.scrollView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0);
+self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(100, 0, 0, 0);
+</code></pre>
+
+<hr />
+
+<h3>不用手势让 UIScrollView 滚起来</h3>
+
+<p>我们可以：</p>
+
+<ol>
+<li><p><strong><code>setContentOffset:animated:</code></strong></p>
+
+<ul>
+<li><p>让 UIScrollView 滚到指定的偏移值（contentOffset），contentOffset 是一个 CGPoint，其中的 x,y 是屏幕左上角的那个点在 UIScrollView 的 content 中的坐标</p></li>
+<li><p>如果 animated 传入的是 YES，UIScrollVIew 的 delegate 的<code>scrollViewDidScroll:</code>和<code>scrollViewDidEndScrollingAnimation:</code>方法都会收到消息。如果 animated 传入的是 NO，只有<code>scrollViewDidScroll:</code>方法会收到消息。</p></li>
+</ul>
+</li>
+<li><p><strong><code>scrollRectToVisible:animated:</code></strong></p>
+
+<ul>
+<li>让 UIScrollView 滚动到指定的矩形区域可见位置</li>
+<li>animated传入值对 delegate 的影响同上</li>
+</ul>
+</li>
+<li><p><strong>点击屏幕状态栏 UIScrollView Scroll to top</strong></p>
+
+<p> 可以在 delegate 的 <code>scrollViewShouldScrollToTop:</code>方法中设置是否开启这个功能。</p></li>
+</ol>
+
+
+<h1>UIScrollViewDelegate</h1>
+
+<h3>UIScrollView 状态</h3>
+
+<p>当UIScrollView 正在滑动的时候，以下几个状态属性会发生改变，UIScrollView 也正是通过这些状态来判断要让 delegate 发出什么消息。</p>
+
+<p><em>表 1-1：UIScrollView 状态属性</em></p>
+
+<table>
+<thead>
+<tr>
+<th>State property </th>
+<th> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tracking       </td>
+<td> YES if the user’s finger is in contact with the device screen.</td>
+</tr>
+<tr>
+<td>dragging       </td>
+<td> YES if the user’s finger is in contact with the device screen and has moved.</td>
+</tr>
+<tr>
+<td>decelerating   </td>
+<td> YES if the scroll view is decelerating as a result of a flick gesture, or a bounce from dragging beyond the scroll view frame.</td>
+</tr>
+<tr>
+<td>zooming        </td>
+<td> YES if the scroll view is tracking a pinch gesture to change its zoomScale property..</td>
+</tr>
+<tr>
+<td>contentOffset  </td>
+<td> A CGPoint value that defines the top-left corner of the scroll view bounds.</td>
+</tr>
+</tbody>
+</table>
+
+
+<h4>Delegate 方法的生命周期</h4>
+
+<ol>
+<li><code>tracking = YES</code></li>
+<li><code>dragging = YES</code>，<code>scrollViewWillBeginDragging:</code></li>
+<li>改变<code>contentOffset</code>，<code>scrollViewDidScroll:</code></li>
+<li>手指离开 UIScrollView，<code>tracking = YES</code>，<code>scrollViewDidEndDragging:willDecelerate:</code></li>
+<li>如果<code>decelerate = YES</code>,发送<code>scrollViewWillBeginDecelerating:</code>。否则直接到第6步</li>
+<li><code>decelerating = NO</code>,<code>scrollViewDidEndDecelerating:</code>，所有步骤完成！</li>
+</ol>
+
+
+<p>知道了 delegate 在什么时候发送什么消息，我们就可以根据实际需求在特定的方法里写代码了。关于 UIScrollViewDelegate 的方法名表达的意思非常清楚。还有一些 delegate 方法是关于缩放（zoom）的生命周期的，其实原理和上面一样。只是第三步的<code>scrollViewDidScroll:</code>改成<code>scrollViewDidZoom</code>。</p>
+
+<h1>支持放大缩小</h1>
+
+<p>UIScrollView支持捏合手势放大缩小的关键：指定一个 View 作为放大缩小的对象。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UIView</span> <span class="o">*</span><span class="p">)</span><span class="nf">viewForZoomingInScrollView:</span><span class="p">(</span><span class="bp">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="nv">scrollView</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="n">imageView</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看出，每次放大缩小只有一个 view 会被放大缩小，如果只是放大缩小图片，使用 UIImageView 就可以了。如果需要缩放多个 view，就需要一个用一个 view的容器将这些 views 全包含进去。</p>
+
+<h1>支持 pageMode</h1>
+
+<p>设置 pageMode = YES 就可以看到一页一页滚动的效果，但是 pageMode 是在特定的场景下使用，并且代码也不只是<code>pageMode = YES</code>就完了。Apple 官方有一个非常好的代码例子：</p>
+
+<p><a href="https://developer.apple.com/library/ios/samplecode/PageControl/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007795">PageControl sample code</a></p>
+
+<h1>UIScrollView 与 Autolayout</h1>
+
+<p>在使用 autolayout 的情况下由于各个 View 之间的距离都是通过 NSLayoutConstraint 设置，这样就算改变 父 view 的 <code>bounds.orign</code>，子 view 也不会改变位置。</p>
+
+<p>官方提供了<strong><em>两种方法</em></strong>让 UIScrolView 在 autolayout 下正常滚动：</p>
+
+<h3>1. 将所有的子 view 嵌套在一个 UIView 中，让 UIScrollView 滚动这个 子 view</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>  <span class="bp">UIView</span> <span class="o">*</span><span class="n">contentView</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">contentView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">contentWidth</span><span class="p">,</span><span class="n">contentHeight</span><span class="p">)];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">contentView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// DON&#39;T change contentView&#39;s translatesAutoresizingMaskIntoConstraints,</span>
+</span><span class='line'>  <span class="c1">// which defaults to YES;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Set the content size of the scroll view to match the size of the content view:</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">scrollView</span> <span class="nl">setContentSize</span><span class="p">:</span><span class="n">CGMakeSize</span><span class="p">(</span><span class="n">contentWidth</span><span class="p">,</span><span class="n">contentHeight</span><span class="p">)];</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="cm">/* the rest of your code here... */</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>  
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2.纯 Autolayout 方式</h3>
+
+<p>To use the pure autolayout approach do the following:</p>
+
+<ul>
+<li>Set translatesAutoresizingMaskIntoConstraints to NO on all views involved.</li>
+<li>Position and size your scroll view with constraints external to the scroll view.</li>
+<li>Use constraints to lay out the subviews within the scroll view, being sure that the constraints tie to all four edges of the scroll view and do not rely on the scroll view to get their size.</li>
+</ul>
+
+
+<p>A simple example would be a large image view, which has an intrinsic content size derived from the size of the image. In the viewDidLoad method of your view controller, you would include code similar to the code shown in the listing below:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>    <span class="bp">UIScrollView</span> <span class="o">*</span><span class="n">scrollView</span><span class="p">;</span>
+</span><span class='line'>    <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">imageView</span><span class="p">;</span>
+</span><span class='line'>    <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">viewsDictionary</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Create the scroll view and the image view.</span>
+</span><span class='line'>    <span class="n">scrollView</span>  <span class="o">=</span> <span class="p">[[</span><span class="bp">UIScrollView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">imageView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Add an image to the image view.</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">imageView</span> <span class="nl">setImage</span><span class="p">:[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="s">&quot;MyReallyBigImage&quot;</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Add the scroll view to our view.</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">scrollView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Add the image view to the scroll view.</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">imageView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Set the translatesAutoresizingMaskIntoConstraints to NO so that the views autoresizing mask is not translated into auto layout constraints.</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span>  <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">imageView</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Set the constraints for the scroll view and the image view.</span>
+</span><span class='line'>    <span class="n">viewsDictionary</span> <span class="o">=</span> <span class="n">NSDictionaryOfVariableBindings</span><span class="p">(</span><span class="n">scrollView</span><span class="p">,</span> <span class="n">imageView</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;H:|[scrollView]|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span> <span class="mi">0</span> <span class="nl">viewsDictionary</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">]];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:|[scrollView]|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span> <span class="mi">0</span> <span class="nl">viewsDictionary</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">]];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;H:|[imageView]|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span> <span class="mi">0</span> <span class="nl">viewsDictionary</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">]];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:|[imageView]|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span> <span class="mi">0</span> <span class="nl">viewsDictionary</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/* the rest of your code here... */</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>对 UIScrollView 的 content 的理解：</h1>
+
+<ul>
+<li>滚动、缩放都是相对于 ScrollView 中的内容的，相当于 ScrollView 是一个窗口，里面的内容被各种缩放、滚动改变位置，我们看到的窗口所在的位置没有发生改变，改变的只是里面的内容。</li>
+<li>UIScrollView 中的缩放是缩放 contentSize</li>
+<li>设置 UIScrollView 中子 View 的 frame 时，是相对于 UIScrollView 的 frame 的，和 contentSize 无关。</li>
+</ul>
+
+
+<hr />
+
+<h1>Reference</h1>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/UIScrollView_pg/Introduction/Introduction.html">Scroll View Programming Guide for iOS</a></li>
+<li><a href="https://developer.apple.com/library/ios/technotes/tn2154/_index.html">UIScrollView And Autolayout</a></li>
+</ul>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="/categories/#ios" title="Pages tagged ios" class="tag">ios</a></span>
+        <span><a href="/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji/" rel="bookmark" title="iOS 之 UIScrollView 学习笔记">iOS 之 UIScrollView 学习笔记</a> was published on <span class="entry-date date published updated"><time datetime="2013-10-09T23:14:00+08:00">October 09, 2013</time></span></span>
+        
+        <span class="author vcard"><span class="fn"><a href="" title="About Vito Zhang">Vito Zhang</a></span></span>
+        
+      </footer>
+    </div><!-- /.entry-content -->
+    
+      <div class="read-more">
+        
+          <div class="read-more-header">
+            <a href="/blog/2014/10/30/ios-8-healthkit-jie-shao/" class="btn">Read More</a>
+          </div><!-- /.read-more-header -->
+          <div class="read-more-content">
+            <h3><a href="/blog/2014/10/30/ios-8-healthkit-jie-shao/" title="iOS 8 HealthKit 介绍">iOS 8 HealthKit 介绍</a></h3>
+            <p>## 如何创建 HealthKit 数据在创建数据前，我们首先需要知道 HealthKit 的数据结构。 **HKUnit**是基本的数据单位，它下面有很多子类表示不同的单位。 **HKQuantity**表示某一种数据单位的数量， &hellip;&hellip; <a href="/blog/2014/10/30/ios-8-healthkit-jie-shao/"> Continue reading</a></p>
+          </div><!-- /.read-more-content -->
+        
+        <div class="read-more-list">
+          
+            <div class="list-item">
+              <h4><a href="/blog/2014/07/18/ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer/" title="iOS 7 语音合成器 - AVSpeechSynthesizer">iOS 7 语音合成器 - AVSpeechSynthesizer</a></h4>
+              <span>Published on July 18, 2014</span>
+            </div><!-- /.list-item -->
+          
+            <div class="list-item">
+              <h4><a href="/blog/2014/03/08/ios-7-uikit-dynamic-xue-xi-zong-jie/" title="iOS 7 UIKit Dynamic 学习总结">iOS 7 UIKit Dynamic 学习总结</a></h4>
+              <span>Published on March 08, 2014</span>
+            </div><!-- /.list-item -->
+          
+        </div><!-- /.read-more-list -->
+      </div><!-- /.read-more -->
+    
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2014 Vito Zhang. Powered by <a href="http://octopress.org">Octopress</a> using the <a href="https://github.com/Z1MM32M4N/hpstr-theme/">HPSTR Theme for Octopress</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+
+	        
+<script src="/javascripts/vendor/jquery-1.9.1.min.js"></script>
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+<script src="/javascripts/scripts.min.js"></script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39495280-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'vitoziv';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://vit0.com/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji/';
+        var disqus_url = 'http://vit0.com/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+	        
+
+</body>
+</html>

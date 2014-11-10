@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 总结 | VITO]]></title>
+  <link href="http://vit0.com/blog/categories/zong-jie/atom.xml" rel="self"/>
+  <link href="http://vit0.com/"/>
+  <updated>2014-11-10T23:42:11+08:00</updated>
+  <id>http://vit0.com/</id>
+  <author>
+    <name><![CDATA[Vito Zhang]]></name>
+    <email><![CDATA[vvitozhang@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[2013年终总结]]></title>
+    <link href="http://vit0.com/blog/2014/01/04/2013nian-zhong-zong-jie/"/>
+    <updated>2014-01-04T17:49:00+08:00</updated>
+    <id>http://vit0.com/blog/2014/01/04/2013nian-zhong-zong-jie</id>
+    <content type="html"><![CDATA[<p>2013年就这么 Gone 了，不擅长写作的我也开始硬着头皮写年终总结了。</p>
+
+<h2>关于学习</h2>
+
+<p>翻出了一年前的暑假自己写的一年计划：<a href="http://thecoder.diandian.com/post/2012-08-31/40038818951">大四一整年的学习计划</a>。现在回过头来看，那时真是 Too Young Too Simple。</p>
+
+<h3>以下是去年还年轻、不懂事时预计今年的学习计划：</h3>
+
+<ul>
+<li>C语言。多研究算法《C语言入门经典》</li>
+<li>学习linux系统，以ubuntu为例。在linux上开发android，J2EE应用</li>
+<li>学习vim编辑器的使用</li>
+<li>ios的开发学习</li>
+<li>html5。从sencha touch 框架入手</li>
+<li>在这期间穿插学习Git和Github的使用，还有时间的话学习下mongoDB</li>
+</ul>
+
+
+<h3>以及2013年实际上学习的东西：</h3>
+
+<p>上面的计划中除了 iOS 和 Git 其它几个都成功的打了酱油。</p>
+
+<p>记得开始学习 iOS正好是一年前的一月份，从学习到正式开始用 iOS 开发生产，到现在正好1年。虽然做了一年的 iOS 但是还是觉得水平还在新手级别，可能算是个高级新手吧，基础的知识还没来得及学好，iOS7又多了一堆东西要学。这一年一直都在用 iPad Debug，前几天终于拿到自己的 iPhone，希望有了 iPhone 能更好的窃取优秀 app 的亮点 :D，2014年要有大进步！</p>
+
+<p>这一年对我来说意义非凡，这一年学到的、看到的东西太多了，不断刷新我对程序世界的认知。主要是和 Sumi 的一群大神在一起，各种光环的加成下，各种能力都有被加成的感觉。</p>
+
+<p>有一段时间很焦虑，想学很多东西，觉得自己知道的太少了，但是由于没有一个很好的时间规划和学习计划，那段时间一直学得很迷茫，东看一点西看一点最后什么都没沉淀下来。随着 iOS 学习的深入，发现很多概念和之前学的东西都是相通的，比如 iOS 的前端代码实际上和 Web 前端大的概念上是很像的，Autolayout 和 Android 中的Relativelayout很像。Objective-c 中的面向对象概念也能从 Java 中找到共通之处。慢慢觉得现在首要任务还是先精通一门，然后再触类旁通。</p>
+
+<p>哦，不得不提的是，由于项目需求，今年研究了各种各样App的 API，快成了 API 专业户了&hellip;还为Moves 封装了 <a href="https://github.com/vitoziv/moves-ios-sdk">iOS 端的 API</a> ，偶尔收到写反馈和交流的邮件，算是今年比较意外的收获。</p>
+
+<p>今年学的一些其它有用的东西：</p>
+
+<ul>
+<li>Octpress + github page 搭建博客</li>
+<li>Git Work Flow，合理的 git 使用也是 sumier 一直关注的问题。</li>
+<li>Unit Testing，在 Ruby 大神的指引下也开始在项目中注重测试了。</li>
+<li>零零碎碎的学了点 CoffeeScript，Sass，Ruby，然后没怎么用很快就忘光了，不过倒是对这些东西有个大体的印象。</li>
+</ul>
+
+
+<h2>2013的生活</h2>
+
+<p>2013年开始就完全离开学校在外面住了，一直和 sumi 的小伙伴们一起生活。</p>
+
+<p><img src="http://vit0.com/images/posts/2014-01-04-1.jpg" alt="Sumi 1" style="width:505px;"/>
+<img src="http://vit0.com/images/posts/2014-01-04-2.jpg" alt="Sumi 2" style="width:250px;"/>
+<img src="http://vit0.com/images/posts/2014-01-04-3.jpg" alt="Sumi 3" style="width:250px;"/></p>
+
+<p>在 sumi 的日子真的很棒，学会了煮咖啡，学会了养猫。Sumi 有着非常棒的分享网络，大家都乐于分享，每天总能发现一些好玩好用的东西。在下班后经常去很多地方吃好吃的，或者发现了好玩的东西可以在工作室里呆到很晚一直研究，有时候等到 BRT 都停运了才回去。还能周末去厦大游泳，玩游戏。不过这样的生活也只是维持到了毕业&hellip;.</p>
+
+<p>然后是毕业季的到来，在学校里相处了4年的室友都各奔东西，吃货5人组也好久没有聚过餐了，以前一起跳舞的小伙伴早就毕业。大家聊天的话题也从上课、老师、图书馆和妹子转到了工作、薪资、结婚。说起来好像没了青春似的，好忧伤。</p>
+
+<p>毕业之后雯子就来厦门了，我的单身汉生活也就这么被终结了。生活变得更有规律，家里环境也越来越好，比以前整洁干净很多。虽然少了些单身汉的自由，但是有了家的感觉。</p>
+
+<h2>对自己的总结</h2>
+
+<p>这一年学的多，总结少，博客也就写了两篇，把笔记写在 Evernote 里和发一篇 blog 区别还是很大的。要养成写博客的习惯还要继续努力啊！比较遗憾的是，今年其实有很多事情可以记录下来，一直没有意识去记录与总结，现在很多事情都想不起来了。</p>
+
+<p>今年主要收获就是，学会了 iOS 开发，买了 Mac 和 iPhone。</p>
+
+<h2>2014年计划</h2>
+
+<p>主要目标就是提升 iOS 水平，能够专精才有时间和心思去做其它想做的事情</p>
+
+<ul>
+<li>多读 Programming Guide，每读一个写一篇总结。目标是一个月一篇总共12篇。</li>
+<li>消化一下<a href="http://www.objc.io/">Objc.io</a>的文章，还有<a href="http://nshipster.com/">NSHipster</a>里面有很多 Tips 也希望能基本上浏览一遍</li>
+<li><p>学习好英文。现在很多有点技术含量的英文文章还是很难看下去，等别人翻译，移动端估计都成 Html5的天下了&hellip;..住我隔壁的是个英语老师，她的建议是设一个目标，比如考托福雅思，这样有一个明确的目标会比较有动力。我觉得可以考虑试试..报个低端点的等级考试 XD</p></li>
+<li><p>计划之外的加分项</p>
+
+<ul>
+<li>用 HTML5写一些 Web 程序。首先之前都是在学 Web 端的东西，现在都没有用，估计都快忘光了，感觉很可惜。我对 Web 是存在着真爱的！其次，从现在发展的尿性看，HTML 5不管能否干掉 Native App，它都有巨大的市场需求，适应未来变化的准备还是要做好。希望明年能有机会玩玩 Web</li>
+<li>在 App Store 上线个小App。今年其实有很多 Idea，倒是都记了下来，不过每次等一天之后冷静下来再分析这个 Idea 都能找到这样那样的不可行之处&hellip;希望2014年能有个微型的 Idea 成功孵化。</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
