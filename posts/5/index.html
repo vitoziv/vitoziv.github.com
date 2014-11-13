@@ -131,8 +131,8 @@
 <header>
   <div class="entry-meta">
     <span class="entry-date date published updated">
-      <time datetime="2014-01-04T17:49:00+08:00">
-        <a href="/blog/2014/01/04/2013nian-zhong-zong-jie/">January 04, 2014</a>
+      <time datetime="2014-07-18T23:41:00+08:00">
+        <a href="/blog/2014/07/18/ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer/">July 18, 2014</a>
       </time>
     </span>
     <span class="author vcard">
@@ -142,95 +142,79 @@
     </span>
     
       &nbsp; &bull; &nbsp;<span class="entry-comments">
-        <a href="/blog/2014/01/04/2013nian-zhong-zong-jie/#disqus_thread">评论</a>
+        <a href="/blog/2014/07/18/ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer/#disqus_thread">评论</a>
       </span>
     
   </div><!-- /.entry-meta -->
   
     <h1 class="entry-title">
-      <a href="/blog/2014/01/04/2013nian-zhong-zong-jie/" rel="bookmark" title="2013年终总结" itemprop="url">2013年终总结</a>
+      <a href="/blog/2014/07/18/ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer/" rel="bookmark" title="iOS 7 语音合成器 - AVSpeechSynthesizer" itemprop="url">iOS 7 语音合成器 - AVSpeechSynthesizer</a>
     </h1>
   
 </header>
 
 <div class="entry-content">
-  <p>2013年就这么 Gone 了，不擅长写作的我也开始硬着头皮写年终总结了。</p>
+  <p>再过不久格志就将迎来一次比较大的版本更新，现在主要功能都开发的差不多了，剩下一些细节的完善。这两天也是正在制作格志的新手引导功能，前段时间 facebook 出的 Paper 中的新手引导效果非常棒，这次格志的新手引导也有借鉴了部分，其中一个功能是使用语音朗读出新手引导的文字内容。</p>
 
-<h2>关于学习</h2>
+<p>由于格志是一个时髦的应用（Only iOS 7）…所以可以很开心的使用 iOS 7 中才有的 AVSpeechSynthesizer，做了一搜索后，可以说这货真的很简单、很好用！</p>
 
-<p>翻出了一年前的暑假自己写的一年计划：<a href="http://thecoder.diandian.com/post/2012-08-31/40038818951">大四一整年的学习计划</a>。现在回过头来看，那时真是 Too Young Too Simple。</p>
+<h2>如何使用</h2>
 
-<h3>以下是去年还年轻、不懂事时预计今年的学习计划：</h3>
+<p>首先，使用 AVSpeechSynthesizer 时需要 <code>#import &lt;AVFoundation/AVFoundation.h&gt;</code></p>
 
-<ul>
-<li>C语言。多研究算法《C语言入门经典》</li>
-<li>学习linux系统，以ubuntu为例。在linux上开发android，J2EE应用</li>
-<li>学习vim编辑器的使用</li>
-<li>ios的开发学习</li>
-<li>html5。从sencha touch 框架入手</li>
-<li>在这期间穿插学习Git和Github的使用，还有时间的话学习下mongoDB</li>
-</ul>
+<p>然后我们可以用几行代码实现让程序阅读一段文字：</p>
 
-
-<h3>以及2013年实际上学习的东西：</h3>
-
-<p>上面的计划中除了 iOS 和 Git 其它几个都成功的打了酱油。</p>
-
-<p>记得开始学习 iOS正好是一年前的一月份，从学习到正式开始用 iOS 开发生产，到现在正好1年。虽然做了一年的 iOS 但是还是觉得水平还在新手级别，可能算是个高级新手吧，基础的知识还没来得及学好，iOS7又多了一堆东西要学。这一年一直都在用 iPad Debug，前几天终于拿到自己的 iPhone，希望有了 iPhone 能更好的窃取优秀 app 的亮点 :D，2014年要有大进步！</p>
-
-<p>这一年对我来说意义非凡，这一年学到的、看到的东西太多了，不断刷新我对程序世界的认知。主要是和 Sumi 的一群大神在一起，各种光环的加成下，各种能力都有被加成的感觉。</p>
-
-<p>有一段时间很焦虑，想学很多东西，觉得自己知道的太少了，但是由于没有一个很好的时间规划和学习计划，那段时间一直学得很迷茫，东看一点西看一点最后什么都没沉淀下来。随着 iOS 学习的深入，发现很多概念和之前学的东西都是相通的，比如 iOS 的前端代码实际上和 Web 前端大的概念上是很像的，Autolayout 和 Android 中的Relativelayout很像。Objective-c 中的面向对象概念也能从 Java 中找到共通之处。慢慢觉得现在首要任务还是先精通一门，然后再触类旁通。</p>
-
-<p>哦，不得不提的是，由于项目需求，今年研究了各种各样App的 API，快成了 API 专业户了&hellip;还为Moves 封装了 <a href="https://github.com/vitoziv/moves-ios-sdk">iOS 端的 API</a> ，偶尔收到写反馈和交流的邮件，算是今年比较意外的收获。</p>
-
-<p>今年学的一些其它有用的东西：</p>
-
-<ul>
-<li>Octpress + github page 搭建博客</li>
-<li>Git Work Flow，合理的 git 使用也是 sumier 一直关注的问题。</li>
-<li>Unit Testing，在 Ruby 大神的指引下也开始在项目中注重测试了。</li>
-<li>零零碎碎的学了点 CoffeeScript，Sass，Ruby，然后没怎么用很快就忘光了，不过倒是对这些东西有个大体的印象。</li>
-</ul>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="s">@&quot;Hello, World!&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">AVSpeechUtterance</span> <span class="o">*</span><span class="n">utterance</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVSpeechUtterance</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithString</span><span class="p">:</span><span class="n">string</span><span class="p">];</span>
+</span><span class='line'><span class="n">utterance</span><span class="p">.</span><span class="n">voice</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVSpeechSynthesisVoice</span> <span class="nl">voiceWithLanguage</span><span class="p">:</span><span class="s">@&quot;en-US&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">AVSpeechSynthesizer</span> <span class="o">*</span><span class="n">speechSynthesizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVSpeechSynthesizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">speechSynthesizer</span> <span class="nl">speakUtterance</span><span class="p">:</span><span class="n">utterance</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>2013的生活</h2>
+<p><code>AVSpeechUtterance </code>对象用于封装要朗读的话语，可以指定这段话的语言、音量和语速等。</p>
 
-<p>2013年开始就完全离开学校在外面住了，一直和 sumi 的小伙伴们一起生活。</p>
+<p>但是上面的代码有个问题，上面代码第三行中传入<code>AVSpeechUtterance</code>的<code>AVSpeechSynthesisVoice </code>对象是在英文的语言环境下阅读文字，如果<strong><em>文字内容的语言</em></strong>和<strong><em>声音的语言</em></strong>不同，程序就不会发出声音。而格志是个国际化 App，目前支持7种语言，所以要针对不同的语言内容设置正确的语音语言代码（如：en-US, zh-CH）。</p>
 
-<p><img src="/images/posts/2014-01-04-1.jpg" alt="Sumi 1" style="width:505px;"/>
-<img src="/images/posts/2014-01-04-2.jpg" alt="Sumi 2" style="width:250px;"/>
-<img src="/images/posts/2014-01-04-3.jpg" alt="Sumi 3" style="width:250px;"/></p>
+<p>可以通过<code>[AVSpeechSynthesisVoice speechVoices]</code>查询所有支持的语言，幸运的是可以通过<code>[AVSpeechSynthesisVoice currentLanguageCode]</code>获取用户当前系统设置中的语言所对应的语言代码。所以上面的代码可以改成这样以支持国际化</p>
 
-<p>在 sumi 的日子真的很棒，学会了煮咖啡，学会了养猫。Sumi 有着非常棒的分享网络，大家都乐于分享，每天总能发现一些好玩好用的东西。在下班后经常去很多地方吃好吃的，或者发现了好玩的东西可以在工作室里呆到很晚一直研究，有时候等到 BRT 都停运了才回去。还能周末去厦大游泳，玩游戏。不过这样的生活也只是维持到了毕业&hellip;.</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="s">@&quot;Hello, World!&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">AVSpeechUtterance</span> <span class="o">*</span><span class="n">utterance</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVSpeechUtterance</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithString</span><span class="p">:</span><span class="n">string</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVSpeechSynthesisVoice</span> <span class="n">currentLanguageCode</span><span class="p">];</span> <span class="c1">// 获取用户当前的语言代码</span>
+</span><span class='line'><span class="n">utterance</span><span class="p">.</span><span class="n">voice</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVSpeechSynthesisVoice</span> <span class="nl">voiceWithLanguage</span><span class="p">:</span><span class="n">code</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">AVSpeechSynthesizer</span> <span class="o">*</span><span class="n">speechSynthesizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVSpeechSynthesizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">speechSynthesizer</span> <span class="nl">speakUtterance</span><span class="p">:</span><span class="n">utterance</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>然后是毕业季的到来，在学校里相处了4年的室友都各奔东西，吃货5人组也好久没有聚过餐了，以前一起跳舞的小伙伴早就毕业。大家聊天的话题也从上课、老师、图书馆和妹子转到了工作、薪资、结婚。说起来好像没了青春似的，好忧伤。</p>
 
-<p>毕业之后雯子就来厦门了，我的单身汉生活也就这么被终结了。生活变得更有规律，家里环境也越来越好，比以前整洁干净很多。虽然少了些单身汉的自由，但是有了家的感觉。</p>
+<p>到这里好像我所需要的功能就大概实现了，当然在真实环境中还应该对语速、音量等参数做一些微调，让语音听上去更自然清晰。</p>
 
-<h2>对自己的总结</h2>
+<p>然后…<code>AVSpeechSynthesizer </code>不止只有这些，<code>AVSpeechSynthesizer </code>的方法中还有有暂停、停止和继续的方法，注意到停止和暂停方法都可以传入一个<code>(AVSpeechBoundary)boundary</code>的参数，用于决定程序是在一个单词朗读完（AVSpeechBoundaryWord）再暂停还是立即（AVSpeechBoundaryImmediate）暂停。</p>
 
-<p>这一年学的多，总结少，博客也就写了两篇，把笔记写在 Evernote 里和发一篇 blog 区别还是很大的。要养成写博客的习惯还要继续努力啊！比较遗憾的是，今年其实有很多事情可以记录下来，一直没有意识去记录与总结，现在很多事情都想不起来了。</p>
+<p><strong> AVSpeechSynthesizerDelegate</strong></p>
 
-<p>今年主要收获就是，学会了 iOS 开发，买了 Mac 和 iPhone。</p>
+<p>在<code>AVSpeechSynthesizerDelegate</code>中其实其它方法都没什么好说的，都是些开始阅读、结束阅读、取消等的状态回调。但是有一个方法不同，它带了将要阅读的文字的 NSRange，这个方法是：<code>- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance;</code>，如果获取到将要阅读的文字是哪些，我们就可以做一些有趣的事情，如：像歌词字幕一样高亮正在阅读的文字，或者可以像下面一样在屏幕中只显示将要阅读的文字。</p>
 
-<h2>2014年计划</h2>
+<p><img src="/images/posts/2014-07-18-ios-7-AVSpeechSynthesizer.gif" title="Speak delegate demo" alt="" /></p>
 
-<p>主要目标就是提升 iOS 水平，能够专精才有时间和心思去做其它想做的事情</p>
+<h2>总结</h2>
 
-<ul>
-<li>多读 Programming Guide，每读一个写一篇总结。目标是一个月一篇总共12篇。</li>
-<li>消化一下<a href="http://www.objc.io/">Objc.io</a>的文章，还有<a href="http://nshipster.com/">NSHipster</a>里面有很多 Tips 也希望能基本上浏览一遍</li>
-<li><p>学习好英文。现在很多有点技术含量的英文文章还是很难看下去，等别人翻译，移动端估计都成 Html5的天下了&hellip;..住我隔壁的是个英语老师，她的建议是设一个目标，比如考托福雅思，这样有一个明确的目标会比较有动力。我觉得可以考虑试试..报个低端点的等级考试 XD</p></li>
-<li><p>计划之外的加分项</p>
-
-<ul>
-<li>用 HTML5写一些 Web 程序。首先之前都是在学 Web 端的东西，现在都没有用，估计都快忘光了，感觉很可惜。我对 Web 是存在着真爱的！其次，从现在发展的尿性看，HTML 5不管能否干掉 Native App，它都有巨大的市场需求，适应未来变化的准备还是要做好。希望明年能有机会玩玩 Web</li>
-<li>在 App Store 上线个小App。今年其实有很多 Idea，倒是都记了下来，不过每次等一天之后冷静下来再分析这个 Idea 都能找到这样那样的不可行之处&hellip;希望2014年能有个微型的 Idea 成功孵化。</li>
-</ul>
-</li>
-</ul>
-
+<p>总之 <code>AVSpeechSynthesizer </code> 是一个简单又实用的语音合成类，分分钟上手有木有。使用语音朗读的场景感觉还是很多的，比如这次格志里用到的朗读用户引导的文字，语音导航，有声读物等等。</p>
 
   
   

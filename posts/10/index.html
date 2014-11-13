@@ -40,7 +40,7 @@
 <!-- Open Graph -->
 <meta property="og:local" content="en_US">
 <meta property="og:type" content="article">
-<meta property="og:url" content="http://vit0.com/posts/2">
+<meta property="og:url" content="http://vit0.com/posts/10">
 <meta property="og:title" content="Vito Zhang 的技术博客">
 <meta property="og:description" content="Vito Zhang 的技术博客。写一些平时开发中学习到的知识与总结。">
 
@@ -48,7 +48,7 @@
 
 <meta property="og:site_name" content="VITO">
 
-<link rel="canonical" href="http://vit0.com/posts/2">
+<link rel="canonical" href="http://vit0.com/posts/10">
 <link href="/favicon.png" rel="icon">
 <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -131,8 +131,8 @@
 <header>
   <div class="entry-meta">
     <span class="entry-date date published updated">
-      <time datetime="2014-11-12T21:34:00+08:00">
-        <a href="/blog/2014/11/12/ios-8-zi-shi-ying-cell/">November 12, 2014</a>
+      <time datetime="2013-08-02T07:56:00+08:00">
+        <a href="/blog/2013/08/02/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/">August 02, 2013</a>
       </time>
     </span>
     <span class="author vcard">
@@ -142,71 +142,20 @@
     </span>
     
       &nbsp; &bull; &nbsp;<span class="entry-comments">
-        <a href="/blog/2014/11/12/ios-8-zi-shi-ying-cell/#disqus_thread">评论</a>
+        <a href="/blog/2013/08/02/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/#disqus_thread">评论</a>
       </span>
     
   </div><!-- /.entry-meta -->
   
     <h1 class="entry-title">
-      <a href="/blog/2014/11/12/ios-8-zi-shi-ying-cell/" rel="bookmark" title="iOS 8 Extension Today Widget 开发总结：数据共享" itemprop="url">iOS 8 Extension Today Widget 开发总结：数据共享</a>
+      <a href="/blog/2013/08/02/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/" rel="bookmark" title="新的开始" itemprop="url">新的开始</a>
     </h1>
   
 </header>
 
 <div class="entry-content">
-  <p>这篇文章主要记录了在制作 Today Widget 时的一些思考，如果想要知道如何创建一个 Today Widget，可以参考下面的文章：</p>
-
-<ul>
-<li><a href="http://www.raywenderlich.com/83809/ios-8-today-extension-tutorial">绿皮网的 iOS 8 Today Extension tutorial(英文)</a></li>
-<li><a href="http://onevcat.com/2014/08/notification-today-widget/">猫神的WWDC 2014 Session笔记 - iOS 通知中心扩展制作入门</a></li>
-</ul>
-
-
-<hr />
-
-<p>在制作 Extension 的过程中还是遇到了一些坑，这里做一些记录。</p>
-
-<p>Extension 的本质：相当于是一个独立的小 App，它可以做到通过 group 的方式和主 app 共享数据。</p>
-
-<p>对于 Today widget 的开发实际上还是比较简单，可以当做是制作一个独立的页面，拉拉 outlet、action 之类的，然后响应数据更新界面，响应动作执行跳转等等。但是这里最大的疑问是数据共享的问题。</p>
-
-<p>从文档中可以知道，想要让主 app 和 extension 之间共享数据，需要通过一个共享文件目录进行共享。这个共享目录通过指定一个 group id 来获取。</p>
-
-<h3>NSUserDefaults 共享数据</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">let</span> <span class="n">userDefaults</span> <span class="o">=</span> <span class="bp">NSUserDefaults</span><span class="p">(</span><span class="nl">suiteName</span><span class="p">:</span> <span class="s">&quot;group.extension.vito&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">userDefaults</span><span class="o">?</span><span class="p">.</span><span class="n">setObject</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="nl">forKey</span><span class="p">:</span> <span class="s">&quot;title&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>共享目录</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">let</span> <span class="n">fileManager</span> <span class="o">=</span> <span class="bp">NSFileManager</span><span class="p">.</span><span class="n">defaultManager</span><span class="p">()</span>
-</span><span class='line'><span class="n">let</span> <span class="n">containerURL</span> <span class="o">=</span> <span class="n">fileManager</span><span class="p">.</span><span class="n">containerURLForSecurityApplicationGroupIdentifier</span><span class="p">(</span><span class="s">&quot;group.mycontainer&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">let</span> <span class="n">storeURL</span> <span class="o">=</span> <span class="n">containerURL</span><span class="o">?</span><span class="p">.</span><span class="n">URLByAppendingPathComponent</span><span class="p">(</span><span class="s">&quot;db.sqlite&quot;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在知道了如何在共享区域保存数据，但是什么时机来保存数据呢？
-一种方式是将应用的数据和 extension 的数据放到共享容器中，这样主应用和 extension 都可以访问到全部的数据。这样的好处就是可以保证 extension 和主应用中显示的数据可以是完全一致的，因为访问的数据就是同一份数据。但是貌似在现在的版本中<em>共享容器中的数据会在手机重装系统后丢失</em>，这似乎是一个 bug：</p>
-
-<ul>
-<li><a href="http://stackoverflow.com/questions/24641768/accessing-core-data-sql-database-in-ios-8-extension-sharing-data-between-app-an">StackOverflow 上的讨论</a></li>
-<li><a href="http://openradar.appspot.com/18750178">Open 状态的相关 Bug report rdar://18750178</a></li>
-</ul>
-
-
-<h3>Background Fetch 机制联想到 extension 的共享数据刷新</h3>
-
-<p>Today widget 也是有 Background fetch 机制的，在<code>func widgetPerformUpdateWithCompletionHandler(completionHandler: ((NCUpdateResult) -&gt; Void)!)</code>方法中就是接收到后台刷新的方法。设备会在认为合适的时间调用这里的代码。</p>
-
-<p>有了后台刷新机制，我们可以就可以很方便的刷新共享区域的数据，比如在主应用中的 background fetch 代码中执行写入数据的代码，设置 background fetch 的时间间隔为一天。这样可以让 extension 每一天显示的数据都是新的。这种方式可以说是比较简单省事，又能达到预期效果的实现方式。
-缺点是：由于backgroud fetch 的刷新时机实际上不是很准确的，就有可能会有一些小的延迟等情况，而且用户也可以在系统的设置应用中关闭其它应用的 background fetch 功能。</p>
+  <p>前段时间尝试使用Hexo管理博客，但是Hexo的bug实在太多。果断放弃Hexo，开始使用octopress。
+使用octopress的感觉还是很好的，官方文档也很全面，按照官方文档一部一部来就行了。</p>
 
   
   
@@ -222,12 +171,10 @@
 <div class="pagination">
   
     
-      <a href="/" class="btn">Previous</a>
+      <a href="{ paginator.previous_page_path }}" class="btn">Previous</a>
     
   
   <a href="/archives">Blog Archives</a>
-  
-    <a href="/posts/3" class="btn">Next</a>
   
 </div><!-- /.pagination -->
 
