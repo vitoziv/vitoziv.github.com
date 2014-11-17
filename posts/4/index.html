@@ -131,8 +131,8 @@
 <header>
   <div class="entry-meta">
     <span class="entry-date date published updated">
-      <time datetime="2014-10-30T22:34:00+08:00">
-        <a href="/blog/2014/10/30/ios-8-healthkit-jie-shao/">October 30, 2014</a>
+      <time datetime="2014-07-18T23:41:00+08:00">
+        <a href="/blog/2014/07/18/ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer/">July 18, 2014</a>
       </time>
     </span>
     <span class="author vcard">
@@ -142,148 +142,27 @@
     </span>
     
       &nbsp; &bull; &nbsp;<span class="entry-comments">
-        <a href="/blog/2014/10/30/ios-8-healthkit-jie-shao/#disqus_thread">评论</a>
+        <a href="/blog/2014/07/18/ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer/#disqus_thread">评论</a>
       </span>
     
   </div><!-- /.entry-meta -->
   
     <h1 class="entry-title">
-      <a href="/blog/2014/10/30/ios-8-healthkit-jie-shao/" rel="bookmark" title="iOS 8 HealthKit 介绍" itemprop="url">iOS 8 HealthKit 介绍</a>
+      <a href="/blog/2014/07/18/ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer/" rel="bookmark" title="iOS 7 语音合成器 - AVSpeechSynthesizer" itemprop="url">iOS 7 语音合成器 - AVSpeechSynthesizer</a>
     </h1>
   
 </header>
 
 <div class="entry-content">
-  <h2>如何创建 HealthKit 数据</h2>
+  <p>再过不久格志就将迎来一次比较大的版本更新，现在主要功能都开发的差不多了，剩下一些细节的完善。这两天也是正在制作格志的新手引导功能，前段时间 facebook 出的 Paper 中的新手引导效果非常棒，这次格志的新手引导也有借鉴了部分，其中一个功能是使用语音朗读出新手引导的文字内容。</p>
 
-<p>在创建数据前，我们首先需要知道 HealthKit 的数据结构。</p>
+<p>由于格志是一个时髦的应用（Only iOS 7）…所以可以很开心的使用 iOS 7 中才有的 AVSpeechSynthesizer，做了一搜索后，可以说这货真的很简单、很好用！</p>
 
-<p><strong>HKUnit</strong></p>
+<h2>如何使用</h2>
 
-<p>是基本的数据单位，它下面有很多子类表示不同的单位。</p>
+<p>首先，使用 AVSpeechSynthesizer 时需要 <code>#import &lt;AVFoundation/AVFoundation.h&gt;</code></p>
 
-<p><strong>HKQuantity</strong></p>
-
-<p>表示某一种数据单位的数量，可以通过这个对象获取一种单位转换成另一种单位的值：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">HKUnit</span> <span class="o">*</span><span class="n">gramUnit</span> <span class="o">=</span> <span class="p">[</span><span class="n">HKUnit</span> <span class="n">gramUnit</span><span class="p">];</span>
-</span><span class='line'><span class="n">HKQuantity</span> <span class="o">*</span><span class="n">grams</span> <span class="o">=</span> <span class="p">[</span><span class="n">HKQuantity</span> <span class="nl">quantityWithUnit</span><span class="p">:</span><span class="n">gramUnit</span> <span class="nl">doubleValue</span><span class="p">:</span><span class="mi">20</span><span class="p">];</span>
-</span><span class='line'><span class="kt">double</span> <span class="n">kg</span> <span class="o">=</span> <span class="p">[</span><span class="n">grams</span> <span class="nl">doubleValueForUnit</span><span class="p">:[</span><span class="n">HKUnit</span> <span class="nl">unitFromString</span><span class="p">:</span><span class="s">@&quot;kg&quot;</span><span class="p">]];</span>
-</span><span class='line'><span class="c1">// kg -&gt; 0.2</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>但是前提是这两个互相转换的单位之间是理论上可以转换的，可以通过 HKUnit 的实例方法 <code>- (BOOL)isCompatibleWithUnit: (HKUnit *)unit;</code> 来判断两个单位之间是否可以转换</p>
-
-<p><strong>HKObjectType</strong></p>
-
-<p>用来表示一个数据是什么类型的，HealthKit 中有几十种类型。HKObjectType 的层级结构可以看下图：</p>
-
-<p><img src="/images/posts/2014-07-18-ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer-1.png" alt="图1 HKObjectType 的层级结构" /></p>
-
-<p><em>图1 HKObjectType 的层级结构</em></p>
-
-<p>在 HealthKit 中我们不能创建自己的类型，但是理解了 HKObjectType 的数据结构对我们今后的开发有很大好处的。
-HKObjectType 对象中主要有两个属性：</p>
-
-<ul>
-<li>identifier</li>
-<li>type name</li>
-</ul>
-
-
-<p>我们可以根据需要创建不同类型的 HKObjectType：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'> <span class="k">@interface</span> <span class="nc">HKobjectType</span> : <span class="bp">NSObject</span>
-</span><span class='line'>  <span class="o">+</span> <span class="p">(</span><span class="n">HKQuantityType</span> <span class="o">*</span><span class="p">)</span><span class="nl">quantityTypeForIdentifier</span><span class="p">:(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">identifier</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">+</span> <span class="p">(</span><span class="n">HKCategoryType</span> <span class="o">*</span><span class="p">)</span><span class="nl">categoryTypeForIdentifier</span><span class="p">:(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">identifier</span><span class="p">;</span>
-</span><span class='line'>  <span class="o">+</span> <span class="p">(</span><span class="n">HKCharacteristicType</span> <span class="o">*</span><span class="p">)</span><span class="nl">characteristicTypeForIdentifier</span><span class="p">:(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">identifier</span><span class="p">;</span>
-</span><span class='line'> <span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>HKObject</strong></p>
-
-<p>所有存储在 HealthKit 中的数据都是 HKObject 的子类。HKObject 的类结构和 HKObjectType 的类结构很相似</p>
-
-<p><img src="/images/posts/2014-07-18-ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer-2.png" alt="图2 HKObject 类的层级结构" /></p>
-
-<p><em>图2 HKObject 类的层级结构</em></p>
-
-<p><strong>HKQuantitySample</strong></p>
-
-<p>是目前 HealthKit 中使用最广泛的一个 HKObject。它主要有两个属性：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'> <span class="k">@interface</span> <span class="nc">HKQuantitySample</span>
-</span><span class='line'>  <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="n">HKQuantityType</span> <span class="o">*</span><span class="n">quantityType</span><span class="p">;</span>  <span class="c1">// 表示这个数量是什么类型的</span>
-</span><span class='line'>  <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="n">HKQuantity</span> <span class="o">*</span><span class="n">quantity</span><span class="p">;</span> <span class="c1">// 数量的值</span>
-</span><span class='line'> <span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>需要注意的是，<code>quantityType</code> 和 <code>quantity</code> 必须是正确匹配的否则在运行时程序会抛出异常。</p>
-
-<p><strong>HKCategorySample</strong></p>
-
-<p>它和 HKQuantitySample 类似</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">HKCategorySample</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="n">HKCategoryType</span> <span class="o">*</span><span class="n">categoryType</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="bp">NSInteger</span> <span class="n">value</span><span class="p">;</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>HKSample</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">HKSample</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="n">HKSampleType</span> <span class="o">*</span><span class="n">sampleType</span><span class="p">;</span> <span class="c1">// 会依据子类来确定这个类型的最终值</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDate</span> <span class="o">*</span><span class="n">startDate</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDate</span> <span class="o">*</span><span class="n">endDate</span><span class="p">;</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>HKObject</strong></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">HKObject</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="bp">NSUUID</span> <span class="o">*</span><span class="n">UUID</span><span class="p">;</span> <span class="c1">// 唯一识别</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="n">HKSource</span> <span class="o">*</span><span class="n">source</span><span class="p">;</span> <span class="c1">// 数据来源</span>
-</span><span class='line'>    <span class="k">@property</span> <span class="p">(</span><span class="k">readonly</span><span class="p">)</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">metadata</span><span class="p">;</span> <span class="c1">// 其它数据</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>HKObject 中的所有属性都是不可变的，因为一旦数据收集后就不应该被更改。HKObject 也是不可变的。所以想要创建一个 HKObject 数据我们应该通过 HKQuantitySample 来创建</p>
-
-<h3>创建一个 HKObject</h3>
+<p>然后我们可以用几行代码实现让程序阅读一段文字：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -291,339 +170,51 @@ HKObjectType 对象中主要有两个属性：</p>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">identifier</span> <span class="o">=</span> <span class="n">HKQuantityTypeIdentifierBodyTemperature</span><span class="p">;</span>
-</span><span class='line'><span class="n">HKQuantityType</span> <span class="o">*</span><span class="n">tempType</span> <span class="o">=</span> <span class="p">[</span><span class="n">HKObjectType</span> <span class="nl">quantityTypeForIdentifier</span><span class="p">:</span><span class="n">identifier</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="s">@&quot;Hello, World!&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">AVSpeechUtterance</span> <span class="o">*</span><span class="n">utterance</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVSpeechUtterance</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithString</span><span class="p">:</span><span class="n">string</span><span class="p">];</span>
+</span><span class='line'><span class="n">utterance</span><span class="p">.</span><span class="n">voice</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVSpeechSynthesisVoice</span> <span class="nl">voiceWithLanguage</span><span class="p">:</span><span class="s">@&quot;en-US&quot;</span><span class="p">];</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">HKQuantity</span> <span class="o">*</span><span class="n">myTemp</span> <span class="o">=</span> <span class="p">[</span><span class="n">HKQuantity</span> <span class="nl">quantityWithUnit</span><span class="p">:[</span><span class="n">HKUnit</span> <span class="n">degreeFahrenheitUnit</span><span class="p">]</span> <span class="nl">doubleValue</span><span class="p">:</span><span class="mf">98.6</span><span class="p">];</span>
+</span><span class='line'><span class="bp">AVSpeechSynthesizer</span> <span class="o">*</span><span class="n">speechSynthesizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVSpeechSynthesizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">speechSynthesizer</span> <span class="nl">speakUtterance</span><span class="p">:</span><span class="n">utterance</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>AVSpeechUtterance </code>对象用于封装要朗读的话语，可以指定这段话的语言、音量和语速等。</p>
+
+<p>但是上面的代码有个问题，上面代码第三行中传入<code>AVSpeechUtterance</code>的<code>AVSpeechSynthesisVoice </code>对象是在英文的语言环境下阅读文字，如果<strong><em>文字内容的语言</em></strong>和<strong><em>声音的语言</em></strong>不同，程序就不会发出声音。而格志是个国际化 App，目前支持7种语言，所以要针对不同的语言内容设置正确的语音语言代码（如：en-US, zh-CH）。</p>
+
+<p>可以通过<code>[AVSpeechSynthesisVoice speechVoices]</code>查询所有支持的语言，幸运的是可以通过<code>[AVSpeechSynthesisVoice currentLanguageCode]</code>获取用户当前系统设置中的语言所对应的语言代码。所以上面的代码可以改成这样以支持国际化</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="s">@&quot;Hello, World!&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">AVSpeechUtterance</span> <span class="o">*</span><span class="n">utterance</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVSpeechUtterance</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithString</span><span class="p">:</span><span class="n">string</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVSpeechSynthesisVoice</span> <span class="n">currentLanguageCode</span><span class="p">];</span> <span class="c1">// 获取用户当前的语言代码</span>
+</span><span class='line'><span class="n">utterance</span><span class="p">.</span><span class="n">voice</span> <span class="o">=</span> <span class="p">[</span><span class="bp">AVSpeechSynthesisVoice</span> <span class="nl">voiceWithLanguage</span><span class="p">:</span><span class="n">code</span><span class="p">];</span>
 </span><span class='line'>
-</span><span class='line'><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">meta</span> <span class="o">=</span> <span class="l">@{</span>
-</span><span class='line'>    <span class="nl">HKMetadataKeyBodyTemperatureSensorLocation</span><span class="p">:</span> <span class="l">@(</span><span class="n">HKBodyTemperatureSensorLocationEar</span><span class="l">)</span>
-</span><span class='line'><span class="l">}</span>
-</span><span class='line'><span class="n">HKQuantitySample</span> <span class="o">*</span><span class="n">temperatureSample</span> <span class="o">=</span> <span class="p">[</span><span class="n">HKQuantitySample</span> <span class="nl">quantitySampleWithType</span><span class="p">:</span><span class="n">tempType</span>
-</span><span class='line'>                    <span class="nl">quantity</span><span class="p">:</span><span class="n">myTemp</span>
-</span><span class='line'>                    <span class="nl">startDate</span><span class="p">:[</span><span class="bp">NSDate</span> <span class="n">date</span><span class="p">]</span>
-</span><span class='line'>                    <span class="nl">endDate</span><span class="p">:</span> <span class="p">[</span><span class="bp">NSDate</span> <span class="n">date</span><span class="p">]</span>
-</span><span class='line'>                    <span class="nl">metadata</span><span class="p">:</span> <span class="n">meta</span><span class="p">];</span>
+</span><span class='line'><span class="bp">AVSpeechSynthesizer</span> <span class="o">*</span><span class="n">speechSynthesizer</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">AVSpeechSynthesizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">speechSynthesizer</span> <span class="nl">speakUtterance</span><span class="p">:</span><span class="n">utterance</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>通过上面的代码，我们已经创建了一个新的数据，接下来我们要将这个数据保存到 HealthKit 的数据库中</p>
+<p>到这里好像我所需要的功能就大概实现了，当然在真实环境中还应该对语速、音量等参数做一些微调，让语音听上去更自然清晰。</p>
 
-<h2>保存 HealthKit 数据</h2>
+<p>然后…<code>AVSpeechSynthesizer </code>不止只有这些，<code>AVSpeechSynthesizer </code>的方法中还有有暂停、停止和继续的方法，注意到停止和暂停方法都可以传入一个<code>(AVSpeechBoundary)boundary</code>的参数，用于决定程序是在一个单词朗读完（AVSpeechBoundaryWord）再暂停还是立即（AVSpeechBoundaryImmediate）暂停。</p>
 
-<p><strong>HKHealthStore</strong></p>
+<p><strong> AVSpeechSynthesizerDelegate</strong></p>
 
-<p>可以想象成我们通过这个对象与 HealthKit 的数据库进行连接，可以通过这个对象保存和查询数据。需要注意的是，HKHealthStore 在应用中应该只保存一个对象，因为每次创建新的对象，实际上相当于是同一个对象，可以理解为它们都会链接到同一个数据库。</p>
+<p>在<code>AVSpeechSynthesizerDelegate</code>中其实其它方法都没什么好说的，都是些开始阅读、结束阅读、取消等的状态回调。但是有一个方法不同，它带了将要阅读的文字的 NSRange，这个方法是：<code>- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance;</code>，如果获取到将要阅读的文字是哪些，我们就可以做一些有趣的事情，如：像歌词字幕一样高亮正在阅读的文字，或者可以像下面一样在屏幕中只显示将要阅读的文字。</p>
 
-<p>使用 HKHealthStore 保存数据的例子：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">store</span> <span class="o">=</span> <span class="p">[</span><span class="n">HKHealthStore</span> <span class="n">new</span><span class="p">];</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="n">HKQuantitySample</span> <span class="o">*</span><span class="n">mySample</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">newSample</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">store</span> <span class="nl">saveObject</span><span class="p">:</span><span class="n">mySample</span> <span class="nl">withCompletion</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">success</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Object Saved!&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>保存数据的代码看起来很容易理解，成功保存数据后，接下来我们希望能从 HealthKit 中获取我们想要的数据</p>
-
-<h2>获取 HealthKit 数据</h2>
-
-<p>可以获取的数据除了 HKObject 外还有 Characteristics</p>
-
-<p><strong>Characteristics</strong></p>
-
-<p>这个数据是用户保存在 HealthKit 中个人信息，这些信息一般情况下不会改变。比如：生日日期、血型、性别等
-通过 API 获取这些信息很简单，下面代码用来获取用户记录在 healthKit 中的生日</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">;</span>
-</span><span class='line'><span class="bp">NSDate</span> <span class="o">*</span><span class="n">dateOfBirth</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">store</span> <span class="nl">dateOfBirthWithError</span><span class="p">:</span><span class="o">&amp;</span><span class="n">error</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>但是大部分数据并不能用这么简单的方式获取，这时候我们就需要通过像条件查询一样的东西来查询数据</p>
-
-<p><strong>HKQuery</strong></p>
-
-<p>我们可以使用 Predicates</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">HKQuantity</span> <span class="o">*</span><span class="n">weight</span> <span class="o">=</span> <span class="p">...</span>
-</span><span class='line'><span class="p">[</span><span class="bp">NSPredicate</span> <span class="nl">predicateWithFormat</span><span class="p">:</span><span class="s">@&quot;%k &gt; %@&quot;</span><span class="p">,</span> <span class="n">HKPredicateKeyPathQuantity</span><span class="p">,</span> <span class="n">weight</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>为了简化 NSPredicate 的使用，HealthKit 中提供了 <code>NSPredicateOperatorType</code>，我们可以将这个 Enum 传入 HKQuery 的一个工厂方法中，生成想要的 HKQuery 对象。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSPredicateOperatorType</span> <span class="n">greaterThan</span> <span class="o">=</span> <span class="n">NSGreaterThanPredicateOperatorType</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">HKQuery</span> <span class="nl">predicateForQuantitySamplesWithOperatorType</span><span class="p">:</span><span class="n">greaterThan</span> <span class="nl">quantity</span><span class="p">:</span><span class="n">weight</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>HKSampleQuery</strong></p>
-
-<ul>
-<li>可以设置限制: HKObjectQueryNoLimit</li>
-<li>排序：NSSortDescriptors</li>
-</ul>
-
-
-<p>一个获取最近血糖值的例子</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">HKQuantityType</span> <span class="o">*</span><span class="n">bloodSugar</span> <span class="o">=</span> <span class="p">...</span>
-</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">endKey</span> <span class="o">=</span> <span class="n">HKSampleSortIdentifierEndDate</span><span class="p">;</span>
-</span><span class='line'><span class="bp">NSSortDescriptor</span> <span class="o">*</span><span class="n">endDate</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSSortDescriptor</span> <span class="nl">sortDescriptorWithKey</span><span class="p">:</span><span class="n">endKey</span> <span class="nl">ascending</span><span class="p">:</span><span class="nb">NO</span><span class="p">];</span>
-</span><span class='line'><span class="n">HKSampleQuery</span> <span class="o">*</span><span class="n">query</span> <span class="o">=</span> <span class="p">[[</span><span class="n">HKSampleQuery</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithSampleType</span><span class="p">:</span><span class="n">bloodSugar</span>
-</span><span class='line'>                <span class="nl">predicate</span><span class="p">:</span><span class="nb">nil</span>
-</span><span class='line'>                <span class="nl">limit</span><span class="p">:</span><span class="mi">1</span>
-</span><span class='line'>                <span class="nl">sortDescriptors</span><span class="p">:</span><span class="l">@[</span><span class="n">endDate</span><span class="l">]</span>
-</span><span class='line'>                <span class="nl">resultsHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">HKSampleQuery</span> <span class="o">*</span><span class="n">query</span><span class="p">,</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">results</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">HKQuantitySample</span> <span class="o">*</span><span class="n">sample</span> <span class="o">=</span> <span class="p">[</span><span class="n">results</span> <span class="n">lastObject</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Sample:  %@&quot;</span><span class="p">,</span> <span class="n">sample</span><span class="p">);</span>
-</span><span class='line'><span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>通过上面的代码可以获取到指定的信息，但是如果我们想要实时更新数据，在每次数据改变时都会获取到最新的数据，我们可以使用 <code>HKObserverQuery</code></p>
-
-<p><strong>HKObserverQuery</strong></p>
-
-<p>用于监听 HealthKit 数据库中的改变。
-它和 HKSampleQuery 的不同之处在于，它是一直处于运行状态的，绑定在这个 Query 中的回调代码会在每次数据改变时被调用。
-并且 HKObserverQuery 还支持 background delivery</p>
-
-<p>示例代码：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">HKQuantityType</span> <span class="o">*</span><span class="n">bloodSugar</span> <span class="o">=</span> <span class="p">...</span>
-</span><span class='line'><span class="n">HKObserverQuery</span> <span class="o">*</span><span class="n">query</span><span class="p">;</span>
-</span><span class='line'><span class="n">query</span> <span class="o">=</span> <span class="p">[[</span><span class="n">HKObserverQuery</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithSampleType</span><span class="p">:</span><span class="n">bloodSugar</span>
-</span><span class='line'>            <span class="nl">predicate</span><span class="p">:</span><span class="nb">nil</span>
-</span><span class='line'>            <span class="nl">updateHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">HKObserverQuery</span> <span class="o">*</span><span class="n">query</span><span class="p">,</span> <span class="n">HKObserverQueryCompletionHandler</span> <span class="n">handler</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Updated!&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>HKAnchoredObjectQuery</strong></p>
-
-<p>作为 HealthKit 的数据提供方，用户每次添加了新数据后，等到一个何时的时机，需要向 HealthKit 的云端数据库中同步数据。开发者可能会想到获取所有的数据，再判断哪些数据需要上传。而 HKAnchoredObjectQuery</p>
-
-<p>HKAnchoredObjectQuery 可以设置限制数，还可以设置一个锚（Anchors）。等一下&hellip;锚是什么东西啊喂&hellip;.</p>
-
-<p>我们来看这两张图：</p>
-
-<p>1.这是 anchor=0 时我们会获取所有的数据</p>
-
-<p><img src="/images/posts/2014-07-18-ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer-3.png" alt="" /></p>
-
-<p>2.当 anchor=3 时我们会获取从第四个数据开始之后的所有数据</p>
-
-<p><img src="/images/posts/2014-07-18-ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer-4.png" alt="" /></p>
-
-<p>这其实就是个索引一样的东西&hellip;anchor 应该设置为我们最后一次见到的数据的 anchor 值，如果还没有见到过任何数据，可以将 anchor 设置为0，在获取数据的 callback 中我们会得到新的 anchor。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">lastAnchor</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="n">HKQuantityType</span> <span class="o">*</span><span class="n">bloodSugar</span> <span class="o">=</span> <span class="p">...</span>
-</span><span class='line'><span class="n">HKAnchoredObjectQuery</span> <span class="o">*</span><span class="n">query</span><span class="p">;</span>
-</span><span class='line'><span class="n">query</span> <span class="o">=</span> <span class="p">[[</span><span class="n">HKAnchoredObjectQuery</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithType</span><span class="p">:</span><span class="n">bloodSugar</span>
-</span><span class='line'>                <span class="nl">predicate</span><span class="p">:</span><span class="nb">nil</span>
-</span><span class='line'>                <span class="nl">anchor</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">lastAnchor</span>
-</span><span class='line'>                <span class="nl">limit</span><span class="p">:</span><span class="n">HKObjectQueryNoLimit</span>
-</span><span class='line'>                <span class="nl">completionHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">HKAnchoredObjectQuery</span> <span class="o">*</span><span class="n">query</span><span class="p">,</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">results</span><span class="p">,</span> <span class="bp">NSUInteger</span> <span class="n">newAnchor</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">lastAnchor</span> <span class="o">=</span> <span class="n">newAnchor</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Results: %@&quot;</span><span class="p">,</span> <span class="n">results</span><span class="p">);</span>
-</span><span class='line'><span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>执行 Query</h3>
-
-<p>执行 queries 的方法在 <code>HKHealthStore</code> 中。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">HKHealthStore</span> :<span class="bp">NSObject</span>
-</span><span class='line'>    <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">executeQuery</span><span class="p">:(</span><span class="n">HKQuery</span> <span class="o">*</span><span class="p">)</span><span class="n">query</span><span class="p">;</span>
-</span><span class='line'>    <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">stopQuery</span><span class="p">:(</span><span class="n">HKQuery</span> <span class="o">*</span><span class="p">)</span><span class="n">query</span><span class="p">;</span> <span class="c1">// 调用这个方法会停止查询数据，并且阻止 query 中的回调被执行</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>一般只有长时间运行的 queries 需要被停止。</p>
-
-<h3>获取统计数据</h3>
-
-<p>我们可以获取所有的数据，然后手动计算出我们想要的统计数据。但是我们也可以使用系统提供的 <code>HKStatistics</code>对象获取统计数据。</p>
-
-<p><strong>HKStatistics</strong></p>
-
-<ul>
-<li>可以获取几种统计数据：Sum、Min、Max、Average</li>
-<li>获取指定数据源的所有数据</li>
-<li>HKStatistics 只支持获取 quantity 类型的数据</li>
-</ul>
-
-
-<p><strong>Classifying Types</strong></p>
-
-<p>不是所有的类型都一样的，比如能量消耗值，我们会关心的是最小值、最大值和平均值，所有能量消耗的总和的意义看起来没有其它几个值重要。</p>
-
-<ul>
-<li>Discrete 类型只关心：最小值、最大值和平均值</li>
-<li>Cumulative 类型只关心：总和</li>
-</ul>
-
-
-<p>HKQuantityType 总是 discrete 或者 cumulative，它有一个 <code>aggregationStyle</code>的属性，可以通过这个属性来判断一个 HKQuantityType 是什么类型的。</p>
-
-<p>回到<code>HKStatistics</code>，我们可以指定一个 <code>HKStatisticsOptions</code> 告诉 HKStatistics 我们需要什么样的统计数据</p>
-
-<p><strong>HKStatisticsQuery</strong></p>
-
-<p>如何使用HKStatisticsQuery 获取今天走的步数</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">HKQuantityType</span> <span class="o">*</span><span class="n">stepCount</span> <span class="o">=</span> <span class="p">...</span>
-</span><span class='line'><span class="bp">NSPredicate</span> <span class="o">*</span><span class="n">today</span> <span class="o">=</span> <span class="p">...</span>
-</span><span class='line'><span class="n">HKStatisticsOptions</span> <span class="n">sumOptions</span> <span class="o">=</span> <span class="n">HKStatisticsOptionCumulativeSum</span><span class="p">;</span>
-</span><span class='line'><span class="n">HKStatisticsQuery</span> <span class="o">*</span><span class="n">query</span><span class="p">;</span>
-</span><span class='line'><span class="n">query</span> <span class="o">=</span> <span class="p">[[</span><span class="n">HKStatisticsQuery</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithQuantityType</span><span class="p">:</span><span class="n">stepCount</span>
-</span><span class='line'>                <span class="nl">quantitySamplePredicate</span><span class="p">:</span><span class="n">today</span>
-</span><span class='line'>                <span class="nl">options</span><span class="p">:</span><span class="n">sumOptions</span>
-</span><span class='line'>                <span class="nl">completionHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">HKStatisticsQuery</span> <span class="o">*</span><span class="n">query</span><span class="p">,</span> <span class="n">HKStatistic</span> <span class="o">*</span><span class="n">result</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">HKQuantity</span> <span class="o">*</span><span class="n">sum</span> <span class="o">=</span> <span class="p">[</span><span class="n">result</span> <span class="n">sumQuantity</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Steps: %lf&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">sum</span> <span class="nl">doubleValueForUnit</span><span class="p">:[</span><span class="n">HKUnit</span> <span class="n">countUnit</span><span class="p">]]);</span>
-</span><span class='line'><span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>HKStatisticsCollection</strong></p>
-
-<p>如果我们想要获取多个统计数据，我们可以使用<code>HKStatisticsCollection</code>, 我们可以指定一个时间段做为统计数据的间距，比如 24 小时为一个统计单元，<code>HKStatisticsCollection</code> 中的数据就会是每个 24 小时内的统计统计数据的集合。</p>
-
-<p><img src="/images/posts/2014-07-18-ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer-5.png" alt="图3 HKStatisticsCollection 中的数据示意图" /></p>
-
-<p><em>图3 HKStatisticsCollection 中的数据示意图</em></p>
-
-<p><strong>HKStatisticsCollectionQuery</strong></p>
-
-<p>如何使用：</p>
-
-<ul>
-<li>设置一个 Statistics options</li>
-<li>设置 Anchor date</li>
-<li>Interval componets</li>
-<li>获取 Collection</li>
-</ul>
-
-
-<p>代码类似其它 Query 的代码，就不写了。</p>
-
-<h2>HealthKit 最佳实战</h2>
-
-<p>开始使用 HealthKit 首先需要在项目中开启 HealthKit 功能。方法是<strong>项目 target -> Capabilities  -> 开启 Health Kit 功能</strong></p>
-
-<p><strong>关于隐私和权限</strong></p>
-
-<ul>
-<li>HealthKit 中的数据对用户来说可能是非常敏感的数据</li>
-<li>不同类型数据的权限是分开的</li>
-<li>读/写权限是分开的</li>
-</ul>
-
-
-<p>在使用 HealthStore 之前开发者需要先使用下面的方法请求权限。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">requestAuthorizationToShareTypes:</span><span class="p">(</span><span class="bp">NSSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">typesToShare</span>
-</span><span class='line'>                <span class="nf">readTypes:</span><span class="p">(</span><span class="bp">NSSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">typesToRead</span>
-</span><span class='line'>                <span class="nf">completion:</span><span class="p">(</span><span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">BOOL</span> <span class="n">success</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">))</span><span class="nv">completion</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>其中，typesToshare 用于指定<strong>读权限</strong>的类型，typesToRead 指定写权限的类型。一旦程序中请求了权限，系统会弹出一个设置权限的界面，如下图：</p>
-
-<p><img src="/images/posts/2014-07-18-ios-7-yu-yin-he-cheng-qi-avspeechsynthesizer-6.png" alt="图4 请求 HealthKit 多个类型权限的弹出界面" /></p>
-
-<p><em>图4 请求 HealthKit 多个类型权限的弹出界面</em></p>
-
-<p>请求完权限后，在程序中，可以通过 <code>- (HKAuthorizationStatus)authorizationStatusForType:(HKObjectType *)type;</code>查看是否获得了指定类型的权限。</p>
+<p><img src="/images/posts/2014-07-18-ios-7-AVSpeechSynthesizer.gif" title="Speak delegate demo" alt="" /></p>
 
 <h2>总结</h2>
 
-<p>对于开发者来说 HealthKit 给应用带来更多的可能性，开发者可以通过获取 HealthKit 内的信息让自己的 App 内容更佳充实。</p>
-
-<h2>引用</h2>
-
-<p>这篇文章所有内容来自<a href="https://developer.apple.com/videos/wwdc/2014/#203-video">WWDC Session 203 Introducing Healthkit</a></p>
+<p>总之 <code>AVSpeechSynthesizer </code> 是一个简单又实用的语音合成类，分分钟上手有木有。使用语音朗读的场景感觉还是很多的，比如这次格志里用到的朗读用户引导的文字，语音导航，有声读物等等。</p>
 
   
   
