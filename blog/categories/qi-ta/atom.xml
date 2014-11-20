@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 其它 | VITO]]></title>
+  <link href="http://vit0.com/blog/categories/qi-ta/atom.xml" rel="self"/>
+  <link href="http://vit0.com/"/>
+  <updated>2014-11-20T11:08:41+08:00</updated>
+  <id>http://vit0.com/</id>
+  <author>
+    <name><![CDATA[Vito Zhang]]></name>
+    <email><![CDATA[vvitozhang@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[新的开始]]></title>
+    <link href="http://vit0.com/blog/2013/08/02/first-one/"/>
+    <updated>2013-08-02T07:56:00+08:00</updated>
+    <id>http://vit0.com/blog/2013/08/02/first-one</id>
+    <content type="html"><![CDATA[<p>前段时间尝试使用Hexo管理博客，但是Hexo的bug实在太多。果断放弃Hexo，开始使用octopress。
+使用octopress的感觉还是很好的，官方文档也很全面，按照官方文档一部一部来就行了。</p>
+]]></content>
+  </entry>
+  
+</feed>

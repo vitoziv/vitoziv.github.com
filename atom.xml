@@ -4,7 +4,7 @@
   <title><![CDATA[VITO]]></title>
   <link href="http://vit0.com/atom.xml" rel="self"/>
   <link href="http://vit0.com/"/>
-  <updated>2014-11-17T16:05:50+08:00</updated>
+  <updated>2014-11-20T11:08:41+08:00</updated>
   <id>http://vit0.com/</id>
   <author>
     <name><![CDATA[Vito Zhang]]></name>
@@ -2418,9 +2418,9 @@ self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(100, 0, 0, 0);
   
   <entry>
     <title type="html"><![CDATA[新的开始]]></title>
-    <link href="http://vit0.com/blog/2013/08/02/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/"/>
+    <link href="http://vit0.com/blog/2013/08/02/first-one/"/>
     <updated>2013-08-02T07:56:00+08:00</updated>
-    <id>http://vit0.com/blog/2013/08/02/新的开始</id>
+    <id>http://vit0.com/blog/2013/08/02/first-one</id>
     <content type="html"><![CDATA[<p>前段时间尝试使用Hexo管理博客，但是Hexo的bug实在太多。果断放弃Hexo，开始使用octopress。
 使用octopress的感觉还是很好的，官方文档也很全面，按照官方文档一部一部来就行了。</p>
 ]]></content>
