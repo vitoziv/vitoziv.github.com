@@ -4,7 +4,7 @@
   <title><![CDATA[VITO]]></title>
   <link href="http://vit0.com/atom.xml" rel="self"/>
   <link href="http://vit0.com/"/>
-  <updated>2014-12-10T16:24:22+08:00</updated>
+  <updated>2014-12-15T12:11:00+08:00</updated>
   <id>http://vit0.com/</id>
   <author>
     <name><![CDATA[Vito Zhang]]></name>
@@ -57,7 +57,7 @@
 
 <p>上面的代码是一个最简单的例子，这个例子看起来好像没有什么问题。但是通过查看这个 delegate 方法的文档后，可以知道，在每次 reload tableview 的时候，程序会先计算出每一个 cell 的高度，等所有高度计算完毕，确定了 tableview 的总的高度后，才开始渲染视图并显示在屏幕上。这意味着在显示 table view 之前需要执行一堆的计算，并且这是在主线程中进行的，如果计算量太大程序就很有可能出现卡顿感。比如： table view 的数据有上千条，或者计算高度的代码中还要先获取图片再根据图片计算高度，这些操作都是非常慢的。</p>
 
-<p>如果在 cell 中使用了 autolayout，在计算 cell 高度时会更麻烦。有兴趣的可以看这里有篇关于[如何在 autolayout 下动态计算高度] 的文章。</p>
+<p>如果在 cell 中使用了 autolayout，在计算 cell 高度时会更麻烦。有兴趣的可以看这里有篇关于<a href="http://johnszumski.com/blog/auto-layout-for-table-view-cells-with-dynamic-heights">如何在 autolayout 下动态计算高度</a> 的文章。</p>
 
 <p>为什么不能等滚动到某个 cell 的时候，再调用计算这个 cell 高度的 delegate 呢？原因是 tableview 需要获得它的内容的总高度，用这个高度去确定滚动条的大小等。直到 iOS 7 <code>UITableViewDelegate</code>中添加了新的 API</p>
 
