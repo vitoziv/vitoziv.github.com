@@ -131,8 +131,8 @@
 <header>
   <div class="entry-meta">
     <span class="entry-date date published updated">
-      <time datetime="2014-01-04T17:49:00+08:00">
-        <a href="/blog/2014/01/04/2013nian-zhong-zong-jie/">January 04, 2014</a>
+      <time datetime="2014-03-08T20:49:00+08:00">
+        <a href="/blog/2014/03/08/ios-7-uikit-dynamic-xue-xi-zong-jie/">March 08, 2014</a>
       </time>
     </span>
     <span class="author vcard">
@@ -142,93 +142,898 @@
     </span>
     
       &nbsp; &bull; &nbsp;<span class="entry-comments">
-        <a href="/blog/2014/01/04/2013nian-zhong-zong-jie/#disqus_thread">评论</a>
+        <a href="/blog/2014/03/08/ios-7-uikit-dynamic-xue-xi-zong-jie/#disqus_thread">评论</a>
       </span>
     
   </div><!-- /.entry-meta -->
   
     <h1 class="entry-title">
-      <a href="/blog/2014/01/04/2013nian-zhong-zong-jie/" rel="bookmark" title="2013年终总结" itemprop="url">2013年终总结</a>
+      <a href="/blog/2014/03/08/ios-7-uikit-dynamic-xue-xi-zong-jie/" rel="bookmark" title="iOS 7 UIKit Dynamic 学习总结" itemprop="url">iOS 7 UIKit Dynamic 学习总结</a>
     </h1>
   
 </header>
 
 <div class="entry-content">
-  <p>2013年就这么 Gone 了，不擅长写作的我也开始硬着头皮写年终总结了。</p>
+  <h2>什么是 UIKit Dynamics</h2>
 
-<h2>关于学习</h2>
-
-<p>翻出了一年前的暑假自己写的一年计划：<a href="http://thecoder.diandian.com/post/2012-08-31/40038818951">大四一整年的学习计划</a>。现在回过头来看，那时真是 Too Young Too Simple。</p>
-
-<h3>以下是去年还年轻、不懂事时预计今年的学习计划：</h3>
+<p>iOS 7 中推出的UIKit Dynamics，主要带来了模拟现实的二维动画效果，Apple 的高度封装让开发者不用知道太多物理知识也可以开发出逼真的物理动画。</p>
 
 <ul>
-<li>C语言。多研究算法《C语言入门经典》</li>
-<li>学习linux系统，以ubuntu为例。在linux上开发android，J2EE应用</li>
-<li>学习vim编辑器的使用</li>
-<li>ios的开发学习</li>
-<li>html5。从sencha touch 框架入手</li>
-<li>在这期间穿插学习Git和Github的使用，还有时间的话学习下mongoDB</li>
+<li>Real word inspired interactions</li>
+<li>Combining predefined and interactive animations</li>
+<li>Designed for UI</li>
 </ul>
 
 
-<h3>以及2013年实际上学习的东西：</h3>
+<h2>Why</h2>
 
-<p>上面的计划中除了 iOS 和 Git 其它几个都成功的打了酱油。</p>
+<p>苹果鼓励模拟真实世界的交互而不只是简单的像素堆砌的拟物风格，所以苹果这些模拟现实的交互动画封装进了 UIKit，希望开发者能开发出更多模拟现实的交互。</p>
 
-<p>记得开始学习 iOS正好是一年前的一月份，从学习到正式开始用 iOS 开发生产，到现在正好1年。虽然做了一年的 iOS 但是还是觉得水平还在新手级别，可能算是个高级新手吧，基础的知识还没来得及学好，iOS7又多了一堆东西要学。这一年一直都在用 iPad Debug，前几天终于拿到自己的 iPhone，希望有了 iPhone 能更好的窃取优秀 app 的亮点 :D，2014年要有大进步！</p>
-
-<p>这一年对我来说意义非凡，这一年学到的、看到的东西太多了，不断刷新我对程序世界的认知。主要是和 Sumi 的一群大神在一起，各种光环的加成下，各种能力都有被加成的感觉。</p>
-
-<p>有一段时间很焦虑，想学很多东西，觉得自己知道的太少了，但是由于没有一个很好的时间规划和学习计划，那段时间一直学得很迷茫，东看一点西看一点最后什么都没沉淀下来。随着 iOS 学习的深入，发现很多概念和之前学的东西都是相通的，比如 iOS 的前端代码实际上和 Web 前端大的概念上是很像的，Autolayout 和 Android 中的Relativelayout很像。Objective-c 中的面向对象概念也能从 Java 中找到共通之处。慢慢觉得现在首要任务还是先精通一门，然后再触类旁通。</p>
-
-<p>哦，不得不提的是，由于项目需求，今年研究了各种各样App的 API，快成了 API 专业户了&hellip;还为Moves 封装了 <a href="https://github.com/vitoziv/moves-ios-sdk">iOS 端的 API</a> ，偶尔收到写反馈和交流的邮件，算是今年比较意外的收获。</p>
-
-<p>今年学的一些其它有用的东西：</p>
+<h2>关键类</h2>
 
 <ul>
-<li>Octpress + github page 搭建博客</li>
-<li>Git Work Flow，合理的 git 使用也是 sumier 一直关注的问题。</li>
-<li>Unit Testing，在 Ruby 大神的指引下也开始在项目中注重测试了。</li>
-<li>零零碎碎的学了点 CoffeeScript，Sass，Ruby，然后没怎么用很快就忘光了，不过倒是对这些东西有个大体的印象。</li>
+<li><strong>UIDynamicAnimator</strong>，封装了底层 iOS 物理引擎，为动力项（UIDynamicItem）提供物理相关的功能和动画。</li>
+<li><strong>UIDynamicBehavior</strong>，动力行为，为动力项提供不同的物理行为</li>
+<li><strong>UIDynamicItem</strong>，动力项，相当于现实世界中的一个基本物体</li>
 </ul>
 
 
-<h2>2013的生活</h2>
+<p><img src="/images/posts/2014-03-08-uidynamic-1.png" alt="image" /></p>
 
-<p>2013年开始就完全离开学校在外面住了，一直和 sumi 的小伙伴们一起生活。</p>
+<p>这三个类的结构是：UIDynamicAnimator 需要一个 refrence view 作为物理引擎的坐标系统，再根据不同需求添加各种动力行为（UIDynamicBehavior），而每个动力行为都可以指定一个或多个动力项（UIDynamicItem），常用的动力项就是一个普通的 View。</p>
 
-<p><img src="/images/posts/2014-01-04-1.jpg" alt="Sumi 1" style="width:505px;"/>
-<img src="/images/posts/2014-01-04-2.jpg" alt="Sumi 2" style="width:250px;"/>
-<img src="/images/posts/2014-01-04-3.jpg" alt="Sumi 3" style="width:250px;"/></p>
+<h2>UIDynamicAnimator</h2>
 
-<p>在 sumi 的日子真的很棒，学会了煮咖啡，学会了养猫。Sumi 有着非常棒的分享网络，大家都乐于分享，每天总能发现一些好玩好用的东西。在下班后经常去很多地方吃好吃的，或者发现了好玩的东西可以在工作室里呆到很晚一直研究，有时候等到 BRT 都停运了才回去。还能周末去厦大游泳，玩游戏。不过这样的生活也只是维持到了毕业&hellip;.</p>
+<p>UIDynamicAnimator 封装了底层 iOS 物理引擎，为动力项（UIDynamicItem）提供物理相关的功能和动画，并为这些动画提供上下文。Animator 作为底层 iOS 物理引擎和动力项（UIDynamicItem）之间的中介，通过 <code>- (void)addBehavior:(UIDynamicBehavior *)behavior;</code> 方法添加不同的动力行为，让动力项拥有物理功能和动画。</p>
 
-<p>然后是毕业季的到来，在学校里相处了4年的室友都各奔东西，吃货5人组也好久没有聚过餐了，以前一起跳舞的小伙伴早就毕业。大家聊天的话题也从上课、老师、图书馆和妹子转到了工作、薪资、结婚。说起来好像没了青春似的，好忧伤。</p>
-
-<p>毕业之后雯子就来厦门了，我的单身汉生活也就这么被终结了。生活变得更有规律，家里环境也越来越好，比以前整洁干净很多。虽然少了些单身汉的自由，但是有了家的感觉。</p>
-
-<h2>对自己的总结</h2>
-
-<p>这一年学的多，总结少，博客也就写了两篇，把笔记写在 Evernote 里和发一篇 blog 区别还是很大的。要养成写博客的习惯还要继续努力啊！比较遗憾的是，今年其实有很多事情可以记录下来，一直没有意识去记录与总结，现在很多事情都想不起来了。</p>
-
-<p>今年主要收获就是，学会了 iOS 开发，买了 Mac 和 iPhone。</p>
-
-<h2>2014年计划</h2>
-
-<p>主要目标就是提升 iOS 水平，能够专精才有时间和心思去做其它想做的事情</p>
+<p>现在来看看 UIDynamicAnimator 都有哪些方法：</p>
 
 <ul>
-<li>多读 Programming Guide，每读一个写一篇总结。目标是一个月一篇总共12篇。</li>
-<li>消化一下<a href="http://www.objc.io/">Objc.io</a>的文章，还有<a href="http://nshipster.com/">NSHipster</a>里面有很多 Tips 也希望能基本上浏览一遍</li>
-<li><p>学习好英文。现在很多有点技术含量的英文文章还是很难看下去，等别人翻译，移动端估计都成 Html5的天下了&hellip;..住我隔壁的是个英语老师，她的建议是设一个目标，比如考托福雅思，这样有一个明确的目标会比较有动力。我觉得可以考虑试试..报个低端点的等级考试 XD</p></li>
-<li><p>计划之外的加分项</p>
-
-<ul>
-<li>用 HTML5写一些 Web 程序。首先之前都是在学 Web 端的东西，现在都没有用，估计都快忘光了，感觉很可惜。我对 Web 是存在着真爱的！其次，从现在发展的尿性看，HTML 5不管能否干掉 Native App，它都有巨大的市场需求，适应未来变化的准备还是要做好。希望明年能有机会玩玩 Web</li>
-<li>在 App Store 上线个小App。今年其实有很多 Idea，倒是都记了下来，不过每次等一天之后冷静下来再分析这个 Idea 都能找到这样那样的不可行之处&hellip;希望2014年能有个微型的 Idea 成功孵化。</li>
+<li>初始化和管理一个 Dynamic Animator</li>
 </ul>
-</li>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 传入一个 Reference view 创建一个 Dynamic Animator</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">initWithReferenceView:</span><span class="p">(</span><span class="bp">UIView</span><span class="o">*</span><span class="p">)</span><span class="nv">view</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 获取在 CGRect 内所有的动力项，这个 CGRect 是基于 Reference view 的二维坐标系统的</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="o">*</span><span class="p">)</span><span class="nf">itemsInRect:</span><span class="p">(</span><span class="bp">CGRect</span><span class="p">)</span><span class="nv">rect</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 添加动力行为</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addBehavior:</span><span class="p">(</span><span class="bp">UIDynamicBehavior</span> <span class="o">*</span><span class="p">)</span><span class="nv">behavior</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 删除指定的动力行为</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">removeBehavior:</span><span class="p">(</span><span class="bp">UIDynamicBehavior</span> <span class="o">*</span><span class="p">)</span><span class="nv">behavior</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 删除所有的动力行为</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">removeAllBehaviors</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>获取 Dynamic Animator’s 的状态</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 是否正在运行</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">readonly</span><span class="p">,</span> <span class="k">getter</span> <span class="o">=</span> <span class="n">isRunning</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">running</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 获取所有的 Behaviors</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">readonly</span><span class="p">,</span> <span class="k">copy</span><span class="p">)</span> <span class="bp">NSArray</span><span class="o">*</span> <span class="n">behaviors</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">UIView</span><span class="o">*</span> <span class="n">referenceView</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 这个 delegate 中有两个回调方法，一个是在 animator 暂停的时候调用，一个是在将要恢复的时候调用</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">)</span> <span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicAnimatorDelegate</span><span class="o">&gt;</span> <span class="n">delegate</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 已经运行了多久的时间，是一个 NSTimeInterval</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">NSTimeInterval</span><span class="p">)</span><span class="nf">elapsedTime</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 如果动力项不是通过 animator 自动计算改变状态，比如，通过代码强制改变一个 item 的 transfrom 时，可以用这个方法通知 animator 这个 item 的改变。如果不用这个方法，animator 之后的动画会覆盖代码中对 item 做的改变，相当于代码改变 transform 变得没有意义。</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">updateItemUsingCurrentState:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Collection View Additions</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">initWithCollectionViewLayout:</span><span class="p">(</span><span class="bp">UICollectionViewLayout</span><span class="o">*</span><span class="p">)</span><span class="nv">layout</span> <span class="c1">// 传入一个 CollectionViewLayout 创建一个 Dynamic Animator</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">layoutAttributesForCellAtIndexPath</span><span class="p">:</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">layoutAttributesForDecorationViewOfKind</span><span class="p">:</span><span class="nl">atIndexPath</span><span class="p">:</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">layoutAttributesForSupplementaryViewOfKind</span><span class="p">:</span><span class="nl">atIndexPath</span><span class="p">:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>从这里开始，让我们先创建一个项目，取名 DynamicDemo，选择 single view project。</p>
+
+<p>在 ViewController.m 文件修改成如下代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">ViewController</span> <span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIView</span> <span class="o">*</span><span class="n">squareView</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIDynamicAnimator</span> <span class="o">*</span><span class="n">animator</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">ViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">orangeColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIDynamicAnimator</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithReferenceView</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的代码创建了一个方形 View，橘黄色背景色。还创建了一个UIDynamicAnimator。</p>
+
+<h2>UIDynamicBehavior 是具体的物理行为。</h2>
+
+<p>UIDynamicBehavior 赋予动态行为给一个或多个动态项（Dynamic Item）。</p>
+
+<ul>
+<li>UIDynamicBehavior 的主要方法和属性</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 在将要进行动画时的 block 回调</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">copy</span><span class="p">)</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="n">action</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 添加到该动态行为中的子动态行为</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">readonly</span><span class="p">,</span> <span class="k">copy</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">childBehaviors</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//  该动态行为相关联的dynamicAnimator</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">UIDynamicAnimator</span> <span class="o">*</span><span class="n">dynamicAnimator</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//添加一个子动态行为</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">addChildBehavior</span><span class="p">:(</span><span class="bp">UIDynamicBehavior</span> <span class="o">*</span><span class="p">)</span><span class="n">behavior</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 移除一个子动态行为</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">removeChildBehavior</span><span class="p">:(</span><span class="bp">UIDynamicBehavior</span> <span class="o">*</span><span class="p">)</span><span class="n">behavior</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 当该动态行为将要被添加到一个UIDynamicAnimator中时，这个方法会被调用。</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">willMoveToAnimator</span><span class="p">:(</span><span class="bp">UIDynamicAnimator</span> <span class="o">*</span><span class="p">)</span><span class="n">dynamicAnimator</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在开发中，大部分情况下使用 UIDynamicBehavior 的子类就足够了，因为UIKit 中已经有几个现成的模拟现实的 UIDynamicBehavior 类。</p>
+
+<h3>UIDynamicBehavior的子类有：</h3>
+
+<h4>UIGravityBehavior</h4>
+
+<p>重力行为，可以指定重力的方向和大小。用gravityDirection指定一个向量，或者设置 angle 和 magnitude。</p>
+
+<p>打开刚才的项目，DynamicDemo，在 ViewController.m 中添加如下代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidAppear:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="nl">viewDidAppear</span><span class="p">:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">UIGravityBehavior</span> <span class="o">*</span><span class="n">gravity</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIGravityBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="l">@[</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="l">]</span><span class="p">];</span> <span class="c1">// 创建一个重力行为</span>
+</span><span class='line'>    <span class="n">gravity</span><span class="p">.</span><span class="n">gravityDirection</span> <span class="o">=</span> <span class="n">CGVectorMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 在垂直向下方向 1000 点/平方秒 的速度</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">gravity</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行项目可以看到效果：</p>
+
+<p><img src="/images/posts/2014-03-08-uikit-dynamic-gravity.gif" alt="image" /></p>
+
+<h3>UICollisionBehavior</h3>
+
+<p>碰撞行为，指定一个边界，物体在到达这个边界的时候会发生碰撞行为。通过实现 UICollisionBehaviorDelegate 可以跟踪物体什么时候开始碰撞和结束碰撞。</p>
+
+<p>现在将下面代码添加到<code>[self.animator addBehavior:gravity];</code>之后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 创建碰撞行为</span>
+</span><span class='line'><span class="bp">UICollisionBehavior</span> <span class="o">*</span><span class="n">collision</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UICollisionBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="n">balls</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 指定 Reference view 的边界为可碰撞边界</span>
+</span><span class='line'><span class="n">collision</span><span class="p">.</span><span class="n">translatesReferenceBoundsIntoBoundary</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// UICollisionBehaviorModeItems:item 只会和别的 item 发生碰撞；UICollisionBehaviorModeBoundaries：item 只和碰撞边界进行碰撞；UICollisionBehaviorModeEverything:item 和 item 之间会发生碰撞，也会和指定的边界发生碰撞。</span>
+</span><span class='line'><span class="n">collision</span><span class="p">.</span><span class="n">collisionMode</span> <span class="o">=</span> <span class="n">UICollisionBehaviorModeEverything</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">collision</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在运行项目：</p>
+
+<p><img src="/images/posts/2014-03-08-uikit-dynamic-collision.gif" alt="image" /></p>
+
+<p>UICollisionBehavior通过下面两个方法来添加碰撞边界，可以根据贝塞尔曲线或者一条直线生成碰撞边界。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addBoundaryWithIdentifier:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">NSCopying</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">identifier</span> <span class="nf">forPath:</span><span class="p">(</span><span class="bp">UIBezierPath</span><span class="o">*</span><span class="p">)</span><span class="nv">bezierPath</span><span class="p">;</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addBoundaryWithIdentifier:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">NSCopying</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">identifier</span> <span class="nf">fromPoint:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">p1</span> <span class="nf">toPoint:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">p2</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>UICollisionBehavior 里的 item 每次发生碰撞都可以通过 delegate 来监听事件。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// item 与 item 之间开始碰撞。</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">collisionBehavior:</span><span class="p">(</span><span class="bp">UICollisionBehavior</span><span class="o">*</span><span class="p">)</span><span class="nv">behavior</span> <span class="nf">beganContactForItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item1</span> <span class="nf">withItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item2</span> <span class="nf">atPoint:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">p</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// item 与 item 之间结束碰撞。</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">collisionBehavior:</span><span class="p">(</span><span class="bp">UICollisionBehavior</span><span class="o">*</span><span class="p">)</span><span class="nv">behavior</span> <span class="nf">endedContactForItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item1</span> <span class="nf">withItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// item 和边界开始碰撞</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">collisionBehavior:</span><span class="p">(</span><span class="bp">UICollisionBehavior</span><span class="o">*</span><span class="p">)</span><span class="nv">behavior</span> <span class="nf">beganContactForItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item</span> <span class="nf">withBoundaryIdentifier:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">NSCopying</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">identifier</span> <span class="nf">atPoint:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">p</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// item 和边界结束碰撞</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">collisionBehavior:</span><span class="p">(</span><span class="bp">UICollisionBehavior</span><span class="o">*</span><span class="p">)</span><span class="nv">behavior</span> <span class="nf">endedContactForItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item</span> <span class="nf">withBoundaryIdentifier:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">NSCopying</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">identifier</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>让我们为项目添加碰撞行为的 delegate ，修改 ViewController.m 为下面样子：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">ViewController</span> <span class="p">()</span> <span class="o">&lt;</span><span class="bp">UICollisionBehaviorDelegate</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIView</span> <span class="o">*</span><span class="n">squareView</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIDynamicAnimator</span> <span class="o">*</span><span class="n">animator</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">BeginnerViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">orangeColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIDynamicAnimator</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithReferenceView</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidAppear:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="nl">viewDidAppear</span><span class="p">:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">UIGravityBehavior</span> <span class="o">*</span><span class="n">gravity</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIGravityBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="l">@[</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="l">]</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">gravity</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">UICollisionBehavior</span> <span class="o">*</span><span class="n">collision</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UICollisionBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="l">@[</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="l">]</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">collision</span><span class="p">.</span><span class="n">translatesReferenceBoundsIntoBoundary</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">collision</span><span class="p">.</span><span class="n">collisionDelegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">collision</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - UICollisionBehaviorDelegate</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">collisionBehavior:</span><span class="p">(</span><span class="bp">UICollisionBehavior</span><span class="o">*</span><span class="p">)</span><span class="nv">behavior</span> <span class="nf">beganContactForItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item</span> <span class="nf">withBoundaryIdentifier:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">NSCopying</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">identifier</span> <span class="nf">atPoint:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">p</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 结束碰撞为 squareView 设置一个随机背景</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithRed</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                      <span class="nl">green</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                       <span class="nl">blue</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                      <span class="nl">alpha</span><span class="p">:</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">collisionBehavior:</span><span class="p">(</span><span class="bp">UICollisionBehavior</span><span class="o">*</span><span class="p">)</span><span class="nv">behavior</span> <span class="nf">endedContactForItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item</span> <span class="nf">withBoundaryIdentifier:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">NSCopying</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">identifier</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 结束碰撞为 squareView 设置一个随机背景</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithRed</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                      <span class="nl">green</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                       <span class="nl">blue</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                      <span class="nl">alpha</span><span class="p">:</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在运行项目将会看到如下效果：</p>
+
+<p><img src="/images/posts/2014-03-08-uikit-dynamic-collision-delegate.gif" alt="collision delegate" /></p>
+
+<h3>UIAttachmentBehavior</h3>
+
+<p>附着行为，让物体附着在某个点或另外一个物体上。可以设置附着点的到物体的距离，阻尼系数和振动频率等。</p>
+
+<p>在 ViewController.m 的 <code>- (void)viewDidAppear:(BOOL)animated</code> 末尾添加如下代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">UIAttachmentBehavior</span> <span class="o">*</span><span class="n">attachment</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIAttachmentBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItem</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span> <span class="nl">attachedToAnchor</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">center</span><span class="p">];</span>
+</span><span class='line'><span class="n">attachment</span><span class="p">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span><span class='line'><span class="n">attachment</span><span class="p">.</span><span class="n">damping</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
+</span><span class='line'><span class="n">attachment</span><span class="p">.</span><span class="n">frequency</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">attachment</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行项目看到效果：</p>
+
+<p><img src="/images/posts/2014-03-08-uikit-dynamic-attachment.gif" alt="attachment" /></p>
+
+<p><strong>属性详细说明</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// UIAttachmentBehaviorTypeAnchor类型的依赖行为的锚点，锚点与行为相关的动力动画的坐标系统有关。</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">CGPoint</span> <span class="n">anchorPoint</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 吸附行为的类型</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">readonly</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">UIAttachmentBehaviorType</span> <span class="n">attachedBehaviorType</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 描述吸附行为减弱的阻力大小</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">damping</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 吸附行为震荡的频率</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">frequency</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 与吸附行为相连的动态项目，当吸附行为类型是UIAttachmentBehaviorTypeItems时有2个元素，当吸附行为类型是UIAttachmentBehaviorTypeAnchor时只有一个元素。</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">readonly</span><span class="p">,</span> <span class="k">copy</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">items</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 吸附行为中的两个吸附点之间的距离，通常用这个属性来调整吸附的长度，可以创建吸附行为之后调用。系统基于你创建吸附行为的方法来自动初始化这个长度</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">length</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>UIDynamicItemBehavior</h3>
+
+<p>物体属性，如密度、弹性系数、摩擦系数、阻力、转动阻力等。</p>
+
+<p>接下来我们修改物体的物理属性，为了能看到这个效果，我们先删除 UIAttachmentBehavior 相关的代码，并在<code>- (void)viewDidAppear:(BOOL)animated</code> 末尾添加如下代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">UIDynamicItemBehavior</span> <span class="o">*</span><span class="n">itemBehavior</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIDynamicItemBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="l">@[</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="l">]</span><span class="p">];</span>
+</span><span class='line'><span class="n">itemBehavior</span><span class="p">.</span><span class="n">elasticity</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">;</span> <span class="c1">// 改变弹性</span>
+</span><span class='line'><span class="n">itemBehavior</span><span class="p">.</span><span class="n">allowsRotation</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span> <span class="c1">// 允许旋转</span>
+</span><span class='line'><span class="p">[</span><span class="n">itemBehavior</span> <span class="nl">addAngularVelocity</span><span class="p">:</span><span class="mi">1</span> <span class="nl">forItem</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">];</span> <span class="c1">// 让物体旋转</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">itemBehavior</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在我们看到，方块的弹性变大了，并且伴随着旋转：</p>
+
+<p><img src="/images/posts/2014-03-08-uikit-dynamic-item.gif" alt="item behavior" /></p>
+
+<p><strong>属性详细说明</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 弹力，通常设置 0~1 之间</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">elasticity</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 摩擦力，0表示完全光滑无摩擦</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">friction</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 密度，一个 100x100 points（1 point 在 retina 屏幕上等于2像素，在普通屏幕上为1像素。）大小的物体，密度1.0，在上面施加 1.0 的力，会产生 100 point/平方秒 的加速度。</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">density</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 线性阻力，物体在移动过程中受到的阻力大小</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">resistance</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 旋转阻力，物体旋转过程中的阻力大小</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">angularResistance</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 是否允许旋转</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">allowsRotation</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>UIPushBehavior</h3>
+
+<p>对物体施加力，可以是持续性的力也可以是一次性的力。用一个向量(CGVector)来表示力的方向和大小。</p>
+
+<p>这次我们通过手势来动态的为物体添加推力，首先注释重力行为的相关代码，然后在<code>- (void)viewDidAppear:(BOOL)animated</code> 末尾添加如下代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="n">viewTapGesture</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UITapGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">tapViewHandler</span><span class="p">:)];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">viewTapGesture</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在ViewController.m中添加方法：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">tapViewHandler:</span><span class="p">(</span><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">gestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="bp">UIPushBehavior</span> <span class="o">*</span><span class="n">push</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIPushBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="l">@[</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="l">]</span> <span class="nl">mode</span><span class="p">:</span><span class="n">UIPushBehaviorModeInstantaneous</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">CGPoint</span> <span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">gestureRecognizer</span> <span class="nl">locationInView</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">CGPoint</span> <span class="n">itemCenter</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">push</span><span class="p">.</span><span class="n">pushDirection</span> <span class="o">=</span> <span class="n">CGVectorMake</span><span class="p">((</span><span class="n">location</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">itemCenter</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="p">(</span><span class="n">location</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">itemCenter</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">push</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面代码会根据手指点击，生成一个由物体中心点指向点击位置的点的向量，通过设置UIPushBehavior的pushDirection让物体产生一个推向点击点的力。说得有点抽象，看看现实效果</p>
+
+<p><img src="/images/posts/2014-03-08-uikit-dynamic-push.gif" alt="push behavior" /></p>
+
+<p><strong>主要的属性和方法</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 推力模式，UIPushBehaviorModeContinuous：持续型。UIPushBehaviorModeInstantaneous：一次性推力。</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="n">UIPushBehaviorMode</span> <span class="n">mode</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 推力是否被激活，在激活状态下，物体才会受到推力效果</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">readwrite</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">active</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 推力的大小和方向</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">readwrite</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">CGVector</span> <span class="n">pushDirection</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>UISnapBehavior</h3>
+
+<p>将一个物体钉在某一点。它只有一个初始化方法和一个属性。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 根据 item 和 point 来确定一个 item 要被定到哪个点上。</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">initWithItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item</span> <span class="nf">snapToPoint:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">point</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 减震系数，范围在0.0~1.0</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">damping</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个就留给大家自己实验了。XD</p>
+
+<h2>Demo</h2>
+
+<p>整个 Demo 的代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">ViewController</span> <span class="p">()</span> <span class="o">&lt;</span><span class="bp">UICollisionBehaviorDelegate</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIView</span> <span class="o">*</span><span class="n">squareView</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIDynamicAnimator</span> <span class="o">*</span><span class="n">animator</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">ViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">orangeColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIDynamicAnimator</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithReferenceView</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidAppear:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="nl">viewDidAppear</span><span class="p">:</span><span class="n">animated</span><span class="p">];</span>
+</span><span class='line'><span class="c1">//    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[self.squareView]];</span>
+</span><span class='line'><span class="c1">//    [self.animator addBehavior:gravity];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">UICollisionBehavior</span> <span class="o">*</span><span class="n">collision</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UICollisionBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="l">@[</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="l">]</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">collision</span><span class="p">.</span><span class="n">translatesReferenceBoundsIntoBoundary</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">collision</span><span class="p">.</span><span class="n">collisionDelegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">collision</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 吸附于某一点，也可以吸附与某个实现了 UIDynamicItem 的对象</span>
+</span><span class='line'><span class="c1">//    UIAttachmentBehavior *attachment = [[UIAttachmentBehavior alloc] initWithItem:self.squareView attachedToAnchor:self.squareView.center];</span>
+</span><span class='line'><span class="c1">//    attachment.length = 50;</span>
+</span><span class='line'><span class="c1">//    attachment.damping = 0.5;</span>
+</span><span class='line'><span class="c1">//    attachment.frequency = 1;</span>
+</span><span class='line'><span class="c1">//    [self.animator addBehavior:attachment];</span>
+</span><span class='line'><span class="c1">//    [self addViewAtPoint:self.squareView.center];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 物体属性：质量、摩擦、阻力等</span>
+</span><span class='line'>    <span class="bp">UIDynamicItemBehavior</span> <span class="o">*</span><span class="n">itemBehavior</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIDynamicItemBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="l">@[</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="l">]</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">itemBehavior</span><span class="p">.</span><span class="n">elasticity</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">itemBehavior</span><span class="p">.</span><span class="n">allowsRotation</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">itemBehavior</span><span class="p">.</span><span class="n">resistance</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">itemBehavior</span> <span class="nl">addAngularVelocity</span><span class="p">:</span><span class="mi">1</span> <span class="nl">forItem</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">itemBehavior</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="n">viewTapGesture</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UITapGestureRecognizer</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">tapViewHandler</span><span class="p">:)];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addGestureRecognizer</span><span class="p">:</span><span class="n">viewTapGesture</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">tapViewHandler:</span><span class="p">(</span><span class="bp">UITapGestureRecognizer</span> <span class="o">*</span><span class="p">)</span><span class="nv">gestureRecognizer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="bp">UIPushBehavior</span> <span class="o">*</span><span class="n">push</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIPushBehavior</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithItems</span><span class="p">:</span><span class="l">@[</span><span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="l">]</span> <span class="nl">mode</span><span class="p">:</span><span class="n">UIPushBehaviorModeInstantaneous</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">CGPoint</span> <span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">gestureRecognizer</span> <span class="nl">locationInView</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">CGPoint</span> <span class="n">itemCenter</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">push</span><span class="p">.</span><span class="n">pushDirection</span> <span class="o">=</span> <span class="n">CGVectorMake</span><span class="p">((</span><span class="n">location</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">itemCenter</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="p">(</span><span class="n">location</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">itemCenter</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">animator</span> <span class="nl">addBehavior</span><span class="p">:</span><span class="n">push</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - Helper</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addViewAtPoint:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">center</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="bp">UIView</span> <span class="o">*</span><span class="n">view</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)];</span>
+</span><span class='line'>    <span class="n">view</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">grayColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">view</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - UICollisionBehaviorDelegate</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">collisionBehavior:</span><span class="p">(</span><span class="bp">UICollisionBehavior</span><span class="o">*</span><span class="p">)</span><span class="nv">behavior</span> <span class="nf">beganContactForItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item</span> <span class="nf">withBoundaryIdentifier:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">NSCopying</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">identifier</span> <span class="nf">atPoint:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">p</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithRed</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                      <span class="nl">green</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                       <span class="nl">blue</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                      <span class="nl">alpha</span><span class="p">:</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">collisionBehavior:</span><span class="p">(</span><span class="bp">UICollisionBehavior</span><span class="o">*</span><span class="p">)</span><span class="nv">behavior</span> <span class="nf">endedContactForItem:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">item</span> <span class="nf">withBoundaryIdentifier:</span><span class="p">(</span><span class="kt">id</span> <span class="o">&lt;</span><span class="bp">NSCopying</span><span class="o">&gt;</span><span class="p">)</span><span class="nv">identifier</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">squareView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithRed</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                      <span class="nl">green</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                       <span class="nl">blue</span><span class="p">:(</span><span class="kt">float</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="n">RAND_MAX</span>
+</span><span class='line'>                                                      <span class="nl">alpha</span><span class="p">:</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>现实中的使用场景</h2>
+
+<ul>
+<li>AlertView 弹出和隐藏</li>
+</ul>
+
+
+<p><img src="http://teehanlax.com.s3.amazonaws.com/wordpress/wp-content/uploads/alertView.gif" alt="alertview" /></p>
+
+<p>图片来自<a href="http://www.teehanlax.com/blog/introduction-to-uikit-dynamics/">teehan+lax</a></p>
+
+<ul>
+<li>类似于系统通知的弹性效果，侧边栏菜单弹性效果</li>
+</ul>
+
+
+<p><img src="http://teehanlax.com.s3.amazonaws.com/wordpress/wp-content/uploads/buttonBounce.gif" alt="slide menu" /></p>
+
+<p>图片来自<a href="http://www.teehanlax.com/blog/introduction-to-uikit-dynamics/">teehan+lax</a></p>
+
+<ul>
+<li>类似于系统 Message 信息拉动时的弹簧效果</li>
+</ul>
+
+
+<p><img src="http://www.objc.io/images/issue-5/springyCollectionView.gif" alt="spring collection view" /></p>
+
+<p>图片来自<a href="http://www.objc.io/issue-5/collection-views-and-uidynamics.html">obj.io</a></p>
+
+<ul>
+<li>还有很多使用场景期待大家共同挖掘补充</li>
+</ul>
+
+
+<h2>总结</h2>
+
+<p>UIKit Dynamic 为开发者提供了模拟现实的交互动画。</p>
+
+<p>从例子中来看，使用 UIKit Dynamic 实际上真的很简单，只需要几行或者十几行代码就能写出很棒的模拟真实世界的交互效果。</p>
+
+<p>UIKit Dynamic 是 UIKit 的一部分，这意味着使用它不需要添加其它额外的framework，所以如果应用只支持 iOS 7 以上，可以在项目中多多使用，让应用中的动画效果瞬间提升好几个档次。</p>
+
+<h2>参考</h2>
+
+<p>2013 WWDC</p>
+
+<ul>
+<li><a href="https://developer.apple.com/wwdc/videos/index.php?id=206">WWDC 2013 206: Getting Started with UIKit Dynamics</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/index.php?id=206">WWDC 2013 221: Advanced Techniques with UIKit Dynamics</a></li>
+</ul>
+
+
+<p>Blog</p>
+
+<ul>
+<li><a href="http://www.shinobicontrols.com/blog/posts/2013/09/19/ios7-day-by-day-day-0-uikit-dynamics">iOS7 Day-by-Day :: Day 0 :: UIKit Dynamics</a></li>
+<li><a href="http://www.raywenderlich.com/zh-hans/52617/uikit-%E5%8A%9B%E5%AD%A6%E6%95%99%E7%A8%8B">UIKit 力学教程</a></li>
+<li><a href="http://www.teehanlax.com/blog/introduction-to-uikit-dynamics/">Introduction to UIKit Dynamics</a></li>
+<li><a href="http://www.objc.io/issue-5/collection-views-and-uidynamics.html">UICollectionView + UIKit Dynamics</a></li>
 </ul>
 
 

@@ -131,8 +131,8 @@
 <header>
   <div class="entry-meta">
     <span class="entry-date date published updated">
-      <time datetime="2013-10-09T23:14:00+08:00">
-        <a href="/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji/">October 09, 2013</a>
+      <time datetime="2013-12-07T09:54:00+08:00">
+        <a href="/blog/2013/12/07/iosxue-xi-zhi-autolayout/">December 07, 2013</a>
       </time>
     </span>
     <span class="author vcard">
@@ -142,54 +142,154 @@
     </span>
     
       &nbsp; &bull; &nbsp;<span class="entry-comments">
-        <a href="/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji/#disqus_thread">评论</a>
+        <a href="/blog/2013/12/07/iosxue-xi-zhi-autolayout/#disqus_thread">评论</a>
       </span>
     
   </div><!-- /.entry-meta -->
   
     <h1 class="entry-title">
-      <a href="/blog/2013/10/09/ios-zhi-uiscrollview-xue-xi-bi-ji/" rel="bookmark" title="iOS 之 UIScrollView 学习笔记" itemprop="url">iOS 之 UIScrollView 学习笔记</a>
+      <a href="/blog/2013/12/07/iosxue-xi-zhi-autolayout/" rel="bookmark" title="iOS学习之Autolayout" itemprop="url">iOS学习之Autolayout</a>
     </h1>
   
 </header>
 
 <div class="entry-content">
-  <h1>使用场景</h1>
+  <h1>学习资料</h1>
 
-<p>在 iOS 中当屏幕装不下需要显示的内容时，就需要使用 Scroll views。使用Scroll views 有两个主要目的：</p>
+<h3>文章</h3>
 
 <ul>
-<li> 通过拖拽 Scroll views 的内容区域，让屏幕外的内容显示出来</li>
-<li> 使用捏合手势（pinch gestures）让内容放大或者缩小</li>
+<li><a href="http://www.raywenderlich.com/50317/beginning-auto-layout-tutorial-in-ios-7-part-1">Beginning Auto Layout Tutorial in iOS 7: Part 1
+</a></li>
+<li><a href="http://www.raywenderlich.com/50319/beginning-auto-layout-tutorial-in-ios-7-part-2">Beginning Auto Layout Tutorial in iOS 7: Part 2</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/AutolayoutPG/Introduction/Introduction.html">Auto Layout Guide（官方）</a></li>
 </ul>
 
 
-<h1>概览</h1>
+<p>前两篇文章对如何在xcode 5中使用autolayout讲得已经很详细了。我使用了一段时间autolayout的感觉是，一般情况下都可以通过xcode的ib上直接设置autolayout的各种属性完成项目需求，除非遇到需求比较复杂的布局。</p>
 
-<p> UIScrollView 类有这几个功能：</p>
+<p>官方的Auto Layout Guide讲得详细易懂，推荐</p>
+
+<h3>WWDC视频</h3>
+
+<h4>2012</h4>
 
 <ul>
-<li> 滑动 scroll view 中的内容</li>
-<li> 缩放内容，通过手势放大缩小内容</li>
-<li> 翻页模式</li>
+<li><a href="https://developer.apple.com/videos/wwdc/2012/?id=202">202 – Introduction to Auto Layout for iOS and OS X</a></li>
+<li><a href="">228 – Best Practices for Mastering Auto Layout</a></li>
+<li><a href="https://developer.apple.com/videos/wwdc/2012/?id=232">232 – Auto Layout by Example</a></li>
+<li><a href="http://www.objc.io/issue-3/advanced-auto-layout-toolbox.html">以及obj.io对这三个视频的总结</a></li>
 </ul>
 
 
-<p>UIScrollView的所有操作都是针对其subviews。</p>
+<h4>2013</h4>
 
-<h1>基础UIScrollView</h1>
+<ul>
+<li><a href="https://developer.apple.com/wwdc/videos/?include=406#406">Taking Control of Auto Layout in Xcode 5</a></li>
+</ul>
 
-<p>实现一个最基础只有滑动功能的 UIScrollView 非常简单，必须步骤只有两个：</p>
+
+<h1>一些学习到的知识点整理</h1>
+
+<h2>用代码创建一个 NSLayoutConstraint</h2>
+
+<p>下面的方法遵循一个计算公式：</p>
+
+<p><strong><code>view1.attribute1 = multiplier × view2.attribute2 + constant</code></strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">constraintWithItem:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">view1</span>
+</span><span class='line'>                 <span class="nf">attribute:</span><span class="p">(</span><span class="n">NSLayoutAttribute</span><span class="p">)</span><span class="nv">attribute1</span>
+</span><span class='line'>                 <span class="nf">relatedBy:</span><span class="p">(</span><span class="n">NSLayoutRelation</span><span class="p">)</span><span class="nv">relation</span>
+</span><span class='line'>                  <span class="nf">toItem:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">view2</span>
+</span><span class='line'>               <span class="nf">attribute:</span><span class="p">(</span><span class="n">NSLayoutAttribute</span><span class="p">)</span><span class="nv">attribute2</span>
+</span><span class='line'>              <span class="nf">multiplier:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">multiplier</span>
+</span><span class='line'>                <span class="nf">constant:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">constant</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>例子：</p>
+
+<ul>
+<li>Button.centerX = Superview.centerX</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintWithItem</span><span class="p">:</span><span class="n">button</span>
+</span><span class='line'>                           <span class="nl">attribute</span><span class="p">:</span><span class="n">NSLayoutAttributeCenterX</span>
+</span><span class='line'>                             <span class="nl">relatedBy</span><span class="p">:</span><span class="n">NSLayoutRelationEqual</span>
+</span><span class='line'>                                <span class="nl">toItem</span><span class="p">:</span><span class="n">superview</span>
+</span><span class='line'>                             <span class="nl">attribute</span><span class="p">:</span><span class="n">NSLayoutAttributeCenterX</span>
+</span><span class='line'>                            <span class="nl">multiplier</span><span class="p">:</span><span class="mf">1.0f</span>
+</span><span class='line'>                              <span class="nl">constant</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Button.bottom = Superview.bottom - <padding></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintWithItem</span><span class="p">:</span><span class="n">button</span>
+</span><span class='line'>                           <span class="nl">attribute</span><span class="p">:</span><span class="n">NSLayoutAttributeBottom</span>
+</span><span class='line'>                             <span class="nl">relatedBy</span><span class="p">:</span><span class="n">NSLayoutRelationEqual</span>
+</span><span class='line'>                                <span class="nl">toItem</span><span class="p">:</span><span class="n">superview</span>
+</span><span class='line'>                             <span class="nl">attribute</span><span class="p">:</span><span class="n">NSLayoutAttributeBottom</span>
+</span><span class='line'>                            <span class="nl">multiplier</span><span class="p">:</span><span class="mf">1.0f</span>
+</span><span class='line'>                              <span class="nl">constant</span><span class="p">:</span><span class="o">-</span><span class="n">padding</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>创建完 NSLayoutConstraint 接下来要将它添加到 view 里，添加方法很简单，用 view 的<code>- (void)addConstraint:(NSLayoutConstraint *)constraint</code>添加。但是应该添加到哪个 view 里呢？</p>
 
 <ol>
-<li>设置 UIScrollView 的 contentSize 属性。这个属性代表可以滚动的区域大小。</li>
-<li>在 UIScrollView 中添加子 view。子 view 提供显示的内容。</li>
+<li><p>兄弟 view 的 Constraint 添加到他们的 superview</p>
+
+<p> <img src="/images/posts/2013-12-07-Cousin-choose.png" title="兄弟 view 之间添加 Constraint 到 superview" alt="兄弟 view 之间添加 Constraint 到 superview" /></p></li>
+<li><p>两个 view 的父 view 是兄弟关系的，Constraint 添加到父 view 的 superview 上</p>
+
+<p> <img src="/images/posts/2013-12-07-parent-cousin-choose.png" title="父 view 是兄弟关系的，Constraint 添加到父 view 的 superview 上" alt="父 view 是兄弟关系的，Constraint 添加到父 view 的 superview 上" /></p></li>
+<li><p>如果两个 view 是 parent-child 关系，Constraint 添加到 parent view上</p>
+
+<p> <img src="/images/posts/2013-12-07-parent-child-choose.jpg" title="如果两个 view 是 parent-child 关系，Constraint 添加到 parent view上" alt="如果两个 view 是 parent-child 关系，Constraint 添加到 parent view上" /></p></li>
 </ol>
 
 
-<p>还有一些可选项来完善 UIScrollView 比如 vertical and horizontal scroll indicators, drag bouncing, zoom bouncing, and directional constraint of scrolling。</p>
+<h2>跨层级 view 之间的 Constraint</h2>
 
-<p>在 UIScrollView 中添加一张很大的图片，然后实现拖动 UIScrollView 显示图片内容：</p>
+<p>有如下的视图层级：</p>
+
+<pre><code>- View
+    - UIScrollView
+        - UISwitch
+    - UIButton
+</code></pre>
+
+<p>其中UISwitch相对 UIScrollView 水平居中，和 ScrollView 同一层级有一个 UIButton，现在要始终保持 UIButton 的水平中点位置和 UISwitch 的水平中点位置在同一条线上。</p>
+
+<p>为 UISwitch 的水平居中 Constraint 建立一个 IBOutlet。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -202,145 +302,168 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
-</span><span class='line'>  <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-</span><span class='line'>  <span class="bp">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="s">@&quot;test.jpg&quot;</span><span class="p">];</span>
-</span><span class='line'>  <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">imageView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage</span><span class="p">:</span><span class="n">image</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// 1. 设置 UIScrollView 的 contentSize 属性。这个属性代表可以滚动的区域大小。</span>
-</span><span class='line'>  <span class="nb">self</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">contentSize</span> <span class="o">=</span> <span class="n">imageView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// 2. 在 UIScrollView 中添加子 view。子 view 提供显示的内容。</span>
-</span><span class='line'>  <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">scrollView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">imageView</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'> <span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>      <span class="c1">// Remove the IB-generated constraint centering the switch in its super view</span>
+</span><span class='line'>      <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">scrollView</span> <span class="nl">removeConstraint</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">horizontalSwitchConstraint</span><span class="p">]</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">// Add a new constraint centering the switch on the button</span>
+</span><span class='line'>      <span class="bp">NSLayoutConstraint</span> <span class="o">*</span><span class="n">cn</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintWithItem</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">switchButton</span>
+</span><span class='line'>                                                          <span class="nl">attribute</span><span class="p">:</span><span class="n">NSLayoutAttributeCenterX</span>
+</span><span class='line'>                                                          <span class="nl">relatedBy</span><span class="p">:</span><span class="n">NSLayoutRelationEqual</span>
+</span><span class='line'>                                                             <span class="nl">toItem</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">button</span>
+</span><span class='line'>                                                          <span class="nl">attribute</span><span class="p">:</span><span class="n">NSLayoutAttributeCenterX</span>
+</span><span class='line'>                                                         <span class="nl">multiplier</span><span class="p">:</span><span class="mf">1.0f</span>
+</span><span class='line'>                                                           <span class="nl">constant</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>      <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraint</span><span class="p">:</span><span class="n">cn</span><span class="p">];</span> 
+</span><span class='line'>  <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>设置contentInset，bouncing，滑动方向等都比较简单就略过之…</p>
+<p>上面的的代码就实现了跨层级视图之间的 Constraint 设置。其实就是这么简单</p>
 
-<hr />
-
-<p><strong>需要注意的是:</strong></p>
-
-<pre><code>在设置UIScrollView的contentInset的时候，UIScrollView 的滚动条会变得很奇怪。
-如果想让滚动条能正常显示应该同时设置scrollIndicatorInsets。
-
-如：
-self.scrollView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0);
-self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(100, 0, 0, 0);
-</code></pre>
-
-<hr />
-
-<h3>不用手势让 UIScrollView 滚起来</h3>
-
-<p>我们可以：</p>
-
-<ol>
-<li><p><strong><code>setContentOffset:animated:</code></strong></p>
+<h2>设置Autolayout有两个原则</h2>
 
 <ul>
-<li><p>让 UIScrollView 滚到指定的偏移值（contentOffset），contentOffset 是一个 CGPoint，其中的 x,y 是屏幕左上角的那个点在 UIScrollView 的 content 中的坐标</p></li>
-<li><p>如果 animated 传入的是 YES，UIScrollVIew 的 delegate 的<code>scrollViewDidScroll:</code>和<code>scrollViewDidEndScrollingAnimation:</code>方法都会收到消息。如果 animated 传入的是 NO，只有<code>scrollViewDidScroll:</code>方法会收到消息。</p></li>
+<li><strong>Ambiguous Layout</strong>(The constraints must be suficient)</li>
+<li><strong>Unsatisfiable Constraints</strong>(The constraints must not conflict)</li>
 </ul>
-</li>
-<li><p><strong><code>scrollRectToVisible:animated:</code></strong></p>
+
+
+<h2>在 IB 中设置明确的宽度</h2>
+
+<p>设置宽度有几个原则：</p>
 
 <ul>
-<li>让 UIScrollView 滚动到指定的矩形区域可见位置</li>
-<li>animated传入值对 delegate 的影响同上</li>
+<li>如果一个 View 的宽高在显示的时候是不确定的：让 view 根据内容改变大小（size to fit size）</li>
+<li>如果一个 View 有确定的大小：改变其宽度的 Constraint Relation 为 >=</li>
+<li>正确的设置<strong>Content Hugging Priority（内容压缩优先级）</strong> 与 <strong>Content Compression Resistance Priority（内容抗压缩优先级）</strong></li>
 </ul>
-</li>
-<li><p><strong>点击屏幕状态栏 UIScrollView Scroll to top</strong></p>
-
-<p> 可以在 delegate 的 <code>scrollViewShouldScrollToTop:</code>方法中设置是否开启这个功能。</p></li>
-</ol>
 
 
-<h1>UIScrollViewDelegate</h1>
+<h3>Relation（Greater/Less） 与 Priority</h3>
 
-<h3>UIScrollView 状态</h3>
+<p>Greater/Less 一般与 Priority 一起使用，为一个 Constraint 设置了 Greater/Less 后，调整 Priority。如果 Constraint 的 Priority 的值越大，程序优先设置它的 Constraint 效果。</p>
 
-<p>当UIScrollView 正在滑动的时候，以下几个状态属性会发生改变，UIScrollView 也正是通过这些状态来判断要让 delegate 发出什么消息。</p>
+<p>如果两个 View 不在同一个层级，此时想要设置他们之间的 Constraint，只能通过代码实现。简单的方式是：先在 Xcode 中设置了 Constraint，然后为这个 Constraint 建立一个 IBOutlet，回到代码中，移除想要替换的 Constraint。</p>
 
-<p><em>表 1-1：UIScrollView 状态属性</em></p>
+<h3>Content Hugging Priority 与 Content Compression Resistance Priority</h3>
+
+<p>含义：</p>
+
+<ul>
+<li>Content Hugging Priority（内容压缩优先级）</li>
+<li>Content Compression Resistance Priority（内容抗压缩优先级）。</li>
+</ul>
+
+
+<p>如果 Constraint 发生冲突时，会先找优先级高的UIView，满足优先级高的UIView 的Constraint 后再依次找优先级低的 Constraint 满足，最后改变 View 的 Frame。如果发生多个 Constraint不能同时满足的情况，就发生了<strong>Unsatisfiable Constraints</strong>的错误。</p>
+
+<h2>Visual Format Language</h2>
+
+<p>VFL(Visual Format Language),提供了一种让代码以一种可视化的方式来设置不同 views 之间的 Constraint。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'> <span class="p">[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;[cancelButton]-[acceptButton]&quot;</span><span class="p">]</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">];</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="bp">UIButton</span> <span class="o">*</span><span class="n">cancelButton</span> <span class="o">=</span> <span class="p">...</span>
+</span><span class='line'>  <span class="bp">UIButton</span> <span class="o">*</span><span class="n">acceptButton</span> <span class="o">=</span> <span class="p">...</span>
+</span><span class='line'>  <span class="n">viewsDictionary</span> <span class="o">=</span> <span class="n">NSDictionaryOfVariableBindings</span><span class="p">(</span><span class="n">cancelButton</span><span class="p">,</span> <span class="n">acceptButton</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Examples:</strong></p>
 
 <table>
 <thead>
 <tr>
-<th>State property </th>
-<th> Description</th>
+<th>Property </th>
+<th> Examples</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>tracking       </td>
-<td> YES if the user’s finger is in contact with the device screen.</td>
+<td>Inequality,Priority </td>
+<td> [wideView(>=60@700)]</td>
 </tr>
 <tr>
-<td>dragging       </td>
-<td> YES if the user’s finger is in contact with the device screen and has moved.</td>
+<td>Vertical:Flush Views,Equal Heights </td>
+<td> V:[redBox][yellowBox(==redBox)]</td>
 </tr>
 <tr>
-<td>decelerating   </td>
-<td> YES if the scroll view is decelerating as a result of a flick gesture, or a bounce from dragging beyond the scroll view frame.</td>
-</tr>
-<tr>
-<td>zooming        </td>
-<td> YES if the scroll view is tracking a pinch gesture to change its zoomScale property..</td>
-</tr>
-<tr>
-<td>contentOffset  </td>
-<td> A CGPoint value that defines the top-left corner of the scroll view bounds.</td>
+<td>Combination </td>
+<td> H:|-[Find]-[FindNext]-[FindField(>=20)]-</td>
 </tr>
 </tbody>
 </table>
 
 
-<h4>Delegate 方法的生命周期</h4>
+<p><img src="/images/posts/2013-12-07-vfl01.png" title="Inequality,Priority" alt="Inequality,Priority" />
+<img src="/images/posts/2013-12-07-vfl02.png" title="Vertical:Flush Views,Equal Heights" alt="Vertical:Flush Views,Equal Heights" />
+<img src="/images/posts/2013-12-07-vfl03.png" title="Combination" alt="Combination" /></p>
+
+<h2>Constraint 在什么时候更新</h2>
+
+<p><img src="/images/posts/2013-12-07-autolayout_phases_of_display.png" title="autolayout_phases_of_display" alt="autolayout_phases_of_display" /></p>
+
+<p>UIView中</p>
+
+<pre><code>-setNeesdDisplay
+-setNeedsLayout
+-setNeedsUpdateConstraints
+</code></pre>
+
+<p>UIView/UIWindow中</p>
+
+<pre><code>-layoutIfNeeded
+</code></pre>
+
+<h2>关于 intrinsicContentSize</h2>
+
+<p>在 UIView 中有个方法<code>-intrinsicContentSize</code>,用于指定一个 view 的 width 和 height，设置了<code>-intrinsicContentSize</code>相当于设置一个不可变的长度或者宽度。有点像 UISlider 只能设置宽度，不能设置高度那样。</p>
+
+<h2>Debug</h2>
 
 <ol>
-<li><code>tracking = YES</code></li>
-<li><code>dragging = YES</code>，<code>scrollViewWillBeginDragging:</code></li>
-<li>改变<code>contentOffset</code>，<code>scrollViewDidScroll:</code></li>
-<li>手指离开 UIScrollView，<code>tracking = YES</code>，<code>scrollViewDidEndDragging:willDecelerate:</code></li>
-<li>如果<code>decelerate = YES</code>,发送<code>scrollViewWillBeginDecelerating:</code>。否则直接到第6步</li>
-<li><code>decelerating = NO</code>,<code>scrollViewDidEndDecelerating:</code>，所有步骤完成！</li>
+<li><p>在 Xcode 中，设置 Autolayout 时可能出现3种状态，分别会出现黄色、红色、蓝色的线或线框。</p>
+
+<ul>
+<li>出现<strong>黄色</strong>的线或者线框表示：View 根据设置的 Constraints 最后计算出的 frame 位置和在xib 中 view 目前显示的位置不一致。此时并没有错误，只要更新一下 Update frames 以下就好</li>
+<li>出现<strong>红色</strong>的线或者线框表示：出现了<strong>Ambiguous Layout</strong>（Constraints 太少以至不能确定一个 view 的位置）或者<strong>Unsatisfiable Constraints</strong>（Constraints 有冲突，确定 view 一个方向上的 Constraints 超过1个）。这种情况要找到没有正确设置 Constraints 的 View 添加缺失的 Constraints 或者删除多余的 Constraints。</li>
+<li><strong>蓝色</strong>线条或者线框表示这个 view 的 Constraints 正确设置，并且 view 目前显示的位置和 Constraints 计算得出的最终位置是在同一个地方。</li>
+</ul>
+</li>
+<li><p>在代码添加 Constraints 的 Debug 方法。</p>
+
+<ul>
+<li>在控制台输出AutolayoutTrace：<code>po [[UIWindow keyWindow] _autolayoutTrace]</code>。如果此时有<strong>Ambiguous Layout</strong>或<strong>Unsatisfiable Constraints</strong>，可以在输出的代码中看到。</li>
+</ul>
+</li>
+<li><p>有用的 debugging defaults</p>
+
+<ul>
+<li>双倍的国际化字符串：<code>NSDoubleLocalizedStrings YES</code></li>
+<li>显示视图的对齐框： <code>UIViewShowAlignmentRects YES</code></li>
+</ul>
+</li>
 </ol>
 
 
-<p>知道了 delegate 在什么时候发送什么消息，我们就可以根据实际需求在特定的方法里写代码了。关于 UIScrollViewDelegate 的方法名表达的意思非常清楚。还有一些 delegate 方法是关于缩放（zoom）的生命周期的，其实原理和上面一样。只是第三步的<code>scrollViewDidScroll:</code>改成<code>scrollViewDidZoom</code>。</p>
+<h2>AutoresizingMask自动转化成 Constraint</h2>
 
-<h1>支持放大缩小</h1>
+<p>view有一个 translatesAutoresizingMaskIntoConstraints 属性，如果设置为 NO，那么在运行时，程序不会自动将AutoresizingMask转化成 Constraint。</p>
 
-<p>UIScrollView支持捏合手势放大缩小的关键：指定一个 View 作为放大缩小的对象。</p>
+<h2>Animation</h2>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UIView</span> <span class="o">*</span><span class="p">)</span><span class="nf">viewForZoomingInScrollView:</span><span class="p">(</span><span class="bp">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="nv">scrollView</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="n">imageView</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>可以看出，每次放大缩小只有一个 view 会被放大缩小，如果只是放大缩小图片，使用 UIImageView 就可以了。如果需要缩放多个 view，就需要一个用一个 view的容器将这些 views 全包含进去。</p>
-
-<h1>支持 pageMode</h1>
-
-<p>设置 pageMode = YES 就可以看到一页一页滚动的效果，但是 pageMode 是在特定的场景下使用，并且代码也不只是<code>pageMode = YES</code>就完了。Apple 官方有一个非常好的代码例子：</p>
-
-<p><a href="https://developer.apple.com/library/ios/samplecode/PageControl/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007795">PageControl sample code</a></p>
-
-<h1>UIScrollView 与 Autolayout</h1>
-
-<p>在使用 autolayout 的情况下由于各个 View 之间的距离都是通过 NSLayoutConstraint 设置，这样就算改变 父 view 的 <code>bounds.orign</code>，子 view 也不会改变位置。</p>
-
-<p>官方提供了<strong><em>两种方法</em></strong>让 UIScrolView 在 autolayout 下正常滚动：</p>
-
-<h3>1. 将所有的子 view 嵌套在一个 UIView 中，让 UIScrollView 滚动这个 子 view</h3>
+<p>关键是在 UIView Animation 中调用<code>[view layoutIfNeeded]</code></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -348,131 +471,20 @@ self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(100, 0, 0, 0);
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
-</span><span class='line'>  <span class="bp">UIView</span> <span class="o">*</span><span class="n">contentView</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">contentView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">contentWidth</span><span class="p">,</span><span class="n">contentHeight</span><span class="p">)];</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">contentView</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// DON&#39;T change contentView&#39;s translatesAutoresizingMaskIntoConstraints,</span>
-</span><span class='line'>  <span class="c1">// which defaults to YES;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// Set the content size of the scroll view to match the size of the content view:</span>
-</span><span class='line'>  <span class="p">[</span><span class="n">scrollView</span> <span class="nl">setContentSize</span><span class="p">:</span><span class="n">CGMakeSize</span><span class="p">(</span><span class="n">contentWidth</span><span class="p">,</span><span class="n">contentHeight</span><span class="p">)];</span>
-</span><span class='line'>
-</span><span class='line'>   <span class="cm">/* the rest of your code here... */</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">}</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'> 
+</span><span class='line'><span class="p">[</span><span class="n">UIview</span> <span class="nl">animateWithDuration</span><span class="p">:</span><span class="mf">1.0</span> <span class="nl">animations</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Constraint Changed...</span>
 </span><span class='line'>  
+</span><span class='line'>  <span class="p">[</span><span class="n">view</span> <span class="n">layoutIfNeeded</span><span class="p">];</span>
+</span><span class='line'><span class="p">}];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>2.纯 Autolayout 方式</h3>
-
-<p>To use the pure autolayout approach do the following:</p>
+<h2>Github上一些好用的Autolayout第三方库</h2>
 
 <ul>
-<li>Set translatesAutoresizingMaskIntoConstraints to NO on all views involved.</li>
-<li>Position and size your scroll view with constraints external to the scroll view.</li>
-<li>Use constraints to lay out the subviews within the scroll view, being sure that the constraints tie to all four edges of the scroll view and do not rely on the scroll view to get their size.</li>
-</ul>
-
-
-<p>A simple example would be a large image view, which has an intrinsic content size derived from the size of the image. In the viewDidLoad method of your view controller, you would include code similar to the code shown in the listing below:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
-</span><span class='line'>    <span class="bp">UIScrollView</span> <span class="o">*</span><span class="n">scrollView</span><span class="p">;</span>
-</span><span class='line'>    <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">imageView</span><span class="p">;</span>
-</span><span class='line'>    <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">viewsDictionary</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Create the scroll view and the image view.</span>
-</span><span class='line'>    <span class="n">scrollView</span>  <span class="o">=</span> <span class="p">[[</span><span class="bp">UIScrollView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">imageView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Add an image to the image view.</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">imageView</span> <span class="nl">setImage</span><span class="p">:[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="s">&quot;MyReallyBigImage&quot;</span><span class="p">]];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Add the scroll view to our view.</span>
-</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">scrollView</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Add the image view to the scroll view.</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">imageView</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Set the translatesAutoresizingMaskIntoConstraints to NO so that the views autoresizing mask is not translated into auto layout constraints.</span>
-</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span>  <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">imageView</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Set the constraints for the scroll view and the image view.</span>
-</span><span class='line'>    <span class="n">viewsDictionary</span> <span class="o">=</span> <span class="n">NSDictionaryOfVariableBindings</span><span class="p">(</span><span class="n">scrollView</span><span class="p">,</span> <span class="n">imageView</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;H:|[scrollView]|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span> <span class="mi">0</span> <span class="nl">viewsDictionary</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">]];</span>
-</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:|[scrollView]|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span> <span class="mi">0</span> <span class="nl">viewsDictionary</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">]];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;H:|[imageView]|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span> <span class="mi">0</span> <span class="nl">viewsDictionary</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">]];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:|[imageView]|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span> <span class="mi">0</span> <span class="nl">viewsDictionary</span><span class="p">:</span><span class="n">viewsDictionary</span><span class="p">]];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/* the rest of your code here... */</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>对 UIScrollView 的 content 的理解：</h1>
-
-<ul>
-<li>滚动、缩放都是相对于 ScrollView 中的内容的，相当于 ScrollView 是一个窗口，里面的内容被各种缩放、滚动改变位置，我们看到的窗口所在的位置没有发生改变，改变的只是里面的内容。</li>
-<li>UIScrollView 中的缩放是缩放 contentSize</li>
-<li>设置 UIScrollView 中子 View 的 frame 时，是相对于 UIScrollView 的 frame 的，和 contentSize 无关。</li>
-</ul>
-
-
-<hr />
-
-<h1>Reference</h1>
-
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/UIScrollView_pg/Introduction/Introduction.html">Scroll View Programming Guide for iOS</a></li>
-<li><a href="https://developer.apple.com/library/ios/technotes/tn2154/_index.html">UIScrollView And Autolayout</a></li>
+<li><a href="https://github.com/cloudkite/Masonry">Masonry</a></li>
+<li><a href="https://github.com/smileyborg/UIView-AutoLayout">UIView AutoLayout</a></li>
 </ul>
 
 

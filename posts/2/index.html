@@ -131,8 +131,8 @@
 <header>
   <div class="entry-meta">
     <span class="entry-date date published updated">
-      <time datetime="2014-11-12T21:34:00+08:00">
-        <a href="/blog/2014/11/12/ios-8-extension-today-widget-kai-fa-zong-jie/">November 12, 2014</a>
+      <time datetime="2014-11-13T23:37:00+08:00">
+        <a href="/blog/2014/11/13/ios-8-zi-shi-ying-cell/">November 13, 2014</a>
       </time>
     </span>
     <span class="author vcard">
@@ -142,71 +142,160 @@
     </span>
     
       &nbsp; &bull; &nbsp;<span class="entry-comments">
-        <a href="/blog/2014/11/12/ios-8-extension-today-widget-kai-fa-zong-jie/#disqus_thread">评论</a>
+        <a href="/blog/2014/11/13/ios-8-zi-shi-ying-cell/#disqus_thread">评论</a>
       </span>
     
   </div><!-- /.entry-meta -->
   
     <h1 class="entry-title">
-      <a href="/blog/2014/11/12/ios-8-extension-today-widget-kai-fa-zong-jie/" rel="bookmark" title="iOS 8 Extension Today Widget 开发总结：数据共享" itemprop="url">iOS 8 Extension Today Widget 开发总结：数据共享</a>
+      <a href="/blog/2014/11/13/ios-8-zi-shi-ying-cell/" rel="bookmark" title="iOS 8 自适应 Cell" itemprop="url">iOS 8 自适应 Cell</a>
     </h1>
   
 </header>
 
 <div class="entry-content">
-  <p>这篇文章主要记录了在制作 Today Widget 时的一些思考，如果想要知道如何创建一个 Today Widget，可以参考下面的文章：</p>
+  <p>在使用 table view 的时侯经常会遇到这样的需求：table view 的 cell 中的内容是动态的，导致在开发的时候不知道一个 cell 的高度具体是多少，所以需要提供一个计算 cell 高度的算法，在每次加载到这个 cell 的时候计算出 cell 真正的高度。</p>
 
-<ul>
-<li><a href="http://www.raywenderlich.com/83809/ios-8-today-extension-tutorial">绿皮网的 iOS 8 Today Extension tutorial(英文)</a></li>
-<li><a href="http://onevcat.com/2014/08/notification-today-widget/">猫神的WWDC 2014 Session笔记 - iOS 通知中心扩展制作入门</a></li>
-</ul>
+<h2>在 iOS 8 之前</h2>
 
-
-<hr />
-
-<p>在制作 Extension 的过程中还是遇到了一些坑，这里做一些记录。</p>
-
-<p>Extension 的本质：相当于是一个独立的小 App，它可以做到通过 group 的方式和主 app 共享数据。</p>
-
-<p>对于 Today widget 的开发实际上还是比较简单，可以当做是制作一个独立的页面，拉拉 outlet、action 之类的，然后响应数据更新界面，响应动作执行跳转等等。但是这里最大的疑问是数据共享的问题。</p>
-
-<p>从文档中可以知道，想要让主 app 和 extension 之间共享数据，需要通过一个共享文件目录进行共享。这个共享目录通过指定一个 group id 来获取。</p>
-
-<h3>NSUserDefaults 共享数据</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">let</span> <span class="n">userDefaults</span> <span class="o">=</span> <span class="bp">NSUserDefaults</span><span class="p">(</span><span class="nl">suiteName</span><span class="p">:</span> <span class="s">&quot;group.extension.vito&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">userDefaults</span><span class="o">?</span><span class="p">.</span><span class="n">setObject</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="nl">forKey</span><span class="p">:</span> <span class="s">&quot;title&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>共享目录</h3>
+<p>没有使用 Autolayout 的情况下，需要实现 table view delegate 的 <code>tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -&gt; CGFloat</code>  方法，在这个方法中计算并返回 cell 的高度。比如，我有一个可以显示任意行数的纯文本 cell，计算 cell 的代码可以是这样：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">let</span> <span class="n">fileManager</span> <span class="o">=</span> <span class="bp">NSFileManager</span><span class="p">.</span><span class="n">defaultManager</span><span class="p">()</span>
-</span><span class='line'><span class="n">let</span> <span class="n">containerURL</span> <span class="o">=</span> <span class="n">fileManager</span><span class="p">.</span><span class="n">containerURLForSecurityApplicationGroupIdentifier</span><span class="p">(</span><span class="s">&quot;group.mycontainer&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">let</span> <span class="n">storeURL</span> <span class="o">=</span> <span class="n">containerURL</span><span class="o">?</span><span class="p">.</span><span class="n">URLByAppendingPathComponent</span><span class="p">(</span><span class="s">&quot;db.sqlite&quot;</span><span class="p">);</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="kr">override</span> <span class="k">func</span> <span class="n">tableView</span><span class="p">(</span><span class="nl">tableView</span><span class="p">:</span> <span class="bp">UITableView</span><span class="p">,</span> <span class="n">heightForRowAtIndexPath</span> <span class="nl">indexPath</span><span class="p">:</span> <span class="bp">NSIndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CGFloat</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">content</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">datas</span><span class="p">[</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span><span class="p">]</span> <span class="kt">as</span> <span class="n">String</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">let</span> <span class="nl">padding</span><span class="p">:</span> <span class="n">CGFloat</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">width</span> <span class="o">=</span> <span class="n">tableView</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">let</span> <span class="n">size</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">CGFloat</span><span class="p">.</span><span class="n">max</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="nl">NSFontAttributeName</span><span class="p">:</span> <span class="bp">UIFont</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="s">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="nl">size</span><span class="p">:</span> <span class="mi">14</span><span class="p">)</span><span class="o">!</span><span class="p">]</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">content</span><span class="p">.</span><span class="n">boundingRectWithSize</span><span class="p">(</span><span class="n">size</span><span class="p">,</span>
+</span><span class='line'>        <span class="nl">options</span><span class="p">:</span> <span class="n">NSStringDrawingOptions</span><span class="p">.</span><span class="n">UsesLineFragmentOrigin</span><span class="p">,</span>
+</span><span class='line'>        <span class="nl">attributes</span><span class="p">:</span> <span class="n">attributes</span><span class="p">,</span>
+</span><span class='line'>        <span class="nl">context</span><span class="p">:</span> <span class="nb">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>现在知道了如何在共享区域保存数据，但是什么时机来保存数据呢？
-一种方式是将应用的数据和 extension 的数据放到共享容器中，这样主应用和 extension 都可以访问到全部的数据。这样的好处就是可以保证 extension 和主应用中显示的数据可以是完全一致的，因为访问的数据就是同一份数据。但是貌似在现在的版本中<em>共享容器中的数据会在手机重装系统后丢失</em>，这似乎是一个 bug：</p>
+<p>上面的代码是一个最简单的例子，这个例子看起来好像没有什么问题。但是通过查看这个 delegate 方法的文档后，可以知道，在每次 reload tableview 的时候，程序会先计算出每一个 cell 的高度，等所有高度计算完毕，确定了 tableview 的总的高度后，才开始渲染视图并显示在屏幕上。这意味着在显示 table view 之前需要执行一堆的计算，并且这是在主线程中进行的，如果计算量太大程序就很有可能出现卡顿感。比如： table view 的数据有上千条，或者计算高度的代码中还要先获取图片再根据图片计算高度，这些操作都是非常慢的。</p>
+
+<p>如果在 cell 中使用了 autolayout，在计算 cell 高度时会更麻烦。有兴趣的可以看这里有篇关于<a href="http://johnszumski.com/blog/auto-layout-for-table-view-cells-with-dynamic-heights">如何在 autolayout 下动态计算高度</a> 的文章。</p>
+
+<p>为什么不能等滚动到某个 cell 的时候，再调用计算这个 cell 高度的 delegate 呢？原因是 tableview 需要获得它的内容的总高度，用这个高度去确定滚动条的大小等。直到 iOS 7 <code>UITableViewDelegate</code>中添加了新的 API</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="n">tableView</span><span class="p">(</span><span class="nl">tableView</span><span class="p">:</span> <span class="bp">UITableView</span><span class="p">,</span> <span class="n">estimatedHeightForRowAtIndexPath</span> <span class="nl">indexPath</span><span class="p">:</span> <span class="bp">NSIndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CGFloat</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个方法用于返回一个 cell 的预估高度，如果在程序中实现了这个方法，tableview 首次加载的时候就不会调用<code>heightForRowAtIndexPath</code> 方法，而是用 <code>estimatedHeightForRowAtIndexPath</code>  返回的预估高度计算 tableview 的总高度，然后 tableview 就可以显示出来了，等到 cell 可见的时候，再去调用<code>heightForRowAtIndexPath</code> 获取 cell 的正确高度。</p>
+
+<p>通过使用<code>estimatedHeightForRowAtIndexPath</code> 这个 Delegate 方法，解决了首次加载 table view 出现的性能问题。但还有一个麻烦的问题，就是在 cell 没有被加载的时候计算 cell 的高度，上面给出的代码中，仅仅是计算一个 NSString 的高度，就需要不少代码了。这种计算实际上是必须的，然而在 iOS 8 开始，你可能可以不用再写这些烦人的计算代码了！</p>
+
+<h2>iOS 8 的魔法</h2>
+
+<p>在 iOS 8 中，self size cell 提供了这样一种机制：cell 如果有一个确定的宽度/高度，autolayout 会自动根据 cell 中的内容计算出对应的高度/宽度。</p>
+
+<h3>TableView 中的 cell 自适应</h3>
+
+<p>要让 table view 的 cell 自适应内容，有几个要点：</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/24641768/accessing-core-data-sql-database-in-ios-8-extension-sharing-data-between-app-an">StackOverflow 上的讨论</a></li>
-<li><a href="http://openradar.appspot.com/18750178">Open 状态的相关 Bug report rdar://18750178</a></li>
+<li>设置的 AutoLayout 约束必须让 cell 的 contentView 知道如何自动延展。关键点是 contentView 的 4 个边都要设置连接到内容的约束，并且内容是会动态改变尺寸的。</li>
+<li>UITableView 的 <code>rowHeight</code> 的值要设置为 <code>UITableViewAutomaticDimension</code></li>
+<li>和 iOS 7 一样，可以实现 <code>estimatedHeightForRowAtIndexPath</code> 方法提升 table view 的第一次加载速度。</li>
+<li>任何时候 cell 的 <code>intrinsicContentSize</code> 改变了（比如 table view 的宽度变了），都必须重新加载 table view 以更新 cell。</li>
 </ul>
 
 
-<h3>Background Fetch 机制联想到 extension 的共享数据刷新</h3>
+<h4>例子</h4>
 
-<p>Today widget 也是有 Background fetch 机制的，在<code>func widgetPerformUpdateWithCompletionHandler(completionHandler: ((NCUpdateResult) -&gt; Void)!)</code>方法中就是接收到后台刷新的方法。设备会在认为合适的时间调用这里的代码。</p>
+<p>在 Xcode 中新建一个项目，在 storyboard 中创建一个 UITableViewController 的 IB，创建一个如下样子的 cell：</p>
 
-<p>有了后台刷新机制，我们可以就可以很方便的刷新共享区域的数据，比如在主应用中的 background fetch 代码中执行写入数据的代码，设置 background fetch 的时间间隔为一天。这样可以让 extension 每一天显示的数据都是新的。这种方式可以说是比较简单省事，又能达到预期效果的实现方式。
-缺点是：由于backgroud fetch 的刷新时机实际上不是很准确的，就有可能会有一些小的延迟等情况，而且用户也可以在系统的设置应用中关闭其它应用的 background fetch 功能。</p>
+<p><img src="/images/posts/2014-11-13-self-size-cell-1.jpg" alt="图1 cell 外观" /></p>
+
+<p><em>图1 cell 外观</em></p>
+
+<p>这个 cell 中有 3 个元素，其中 imageView 的 autoLayout 约束为：</p>
+
+<ul>
+<li>imageView 左边离 contentView 左边 0</li>
+<li>imageView 上边离 contentView 上边 0</li>
+<li>imageView 的 width 和 height 为 80</li>
+<li>imageView 下边离 contentView 下边大于等于 0（为了防止内容太少，导致 cell 高度小于图片高度）</li>
+</ul>
+
+
+<p>titleLabel 的 autoLayout 约束为：</p>
+
+<ul>
+<li>titleLabel 左边离 imageView 右边 8</li>
+<li>titleLabel 上边和 imageView 上边在同一只线上</li>
+<li>titleLabel 右边离 contentView 右边 0</li>
+<li>titleLabel 下边离 description 上边 8</li>
+<li>titleLabel 的高度小于等于 22，优先级为 250</li>
+</ul>
+
+
+<p>descriptionLabel 的约束为：</p>
+
+<ul>
+<li>descriptionLabel 左边和 titleLabel 左边在同一直线上</li>
+<li>descriptionLabel 上边里 titleLabel 8</li>
+<li>descriptionLabel 下边里 contentView 下边 0</li>
+<li>descriptionLabel 右边离 contentView 右边 0</li>
+</ul>
+
+
+<p>然后在这个 IB 对应的  UITableViewController 中加载一些数据进去，显示效果如图：</p>
+
+<p><img src="/images/posts/2014-11-13-self-size-cell-2.jpg" alt="图2 自适应 cell 效果图" /></p>
+
+<p><em>图2 自适应 cell 效果图</em></p>
+
+<p>实现这个效果，我除了设置了 autoLayout，还设置了 tableView 的 <code>rowHeight = UITableViewAutomaticDimension</code>，然后就是这样了。一点计算 cell 高度的代码都没有！！我连 <code>heightForRowAtIndexPath</code>都不用实现，真的是&hellip;.爽出味啊！所以如果已经在开发 iOS 8 Only 的应用了一定要用autolayout，把烦人的计算交给 autolayout 去吧。</p>
+
+<h3>CollectionView 中的 cell 自适应</h3>
+
+<p>在 collection view 中也能让 cell 自适应内容大小，如果 UICollectionView 的 layout 是一个 UICollectionViewFlowLayout，只需要将 <code>layout.itemSize = ...</code> 改成 <code>layout.estimatedItemSize = ...</code>。
+只要设置了 layout 的 estimatedItemSize，collection view 就会根据 cell 里面的 autolayout 约束去确定cell 的大小。</p>
+
+<p><strong>原理：</strong></p>
+
+<ol>
+<li>collection view 根据 layout 的 estimatedItemSize 算出估计的 contentSize，有了 contentSize collection view 就开始显示</li>
+<li>collection view 在显示的过程中，即将被显示的 cell 根据 autolayout 的约束算出自适应内容的 size</li>
+<li>layout 从 collection view 里获取更新过的 size attribute</li>
+<li>layout 返回最终的 size attribute 给 collection view</li>
+<li>collection 使用这个最终的 size attribute 展示 cell</li>
+</ol>
+
+
+<h2>总结</h2>
+
+<p>这次 iOS 8 的发布对 UI 开发来说是越来方便了，很多以前需要写大量计算的代码现在都可以通过拖拖 IB 上的 UI 控件就可以实现了，当然首先你要会 autolayout。 如果很幸运的在开发 iOS 8 only 的应用，真的可以删除<code>heightForRowAtIndexPath</code>中那些繁重的计算代码了！让 autolayout 帮我们完成所有的工作吧。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/videos/wwdc/2014/#226-video">WWDC Session 226 Whats New in Table and Collection Views</a></li>
+<li><a href="http://captechconsulting.com/blog/tyler-tillage/ios-8-tutorial-series-auto-sizing-table-cells">iOS 8 Tutorial Series: Auto Sizing Table Cells</a></li>
+</ul>
+
 
   
   

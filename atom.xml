@@ -4,7 +4,7 @@
   <title><![CDATA[VITO]]></title>
   <link href="http://vit0.com/atom.xml" rel="self"/>
   <link href="http://vit0.com/"/>
-  <updated>2014-12-15T12:11:00+08:00</updated>
+  <updated>2014-12-25T21:59:18+08:00</updated>
   <id>http://vit0.com/</id>
   <author>
     <name><![CDATA[Vito Zhang]]></name>
@@ -12,6 +12,333 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS UITextView 输入内容实时更新 Cell 的高度]]></title>
+    <link href="http://vit0.com/blog/2014/12/25/ios-textview-in-cell/"/>
+    <updated>2014-12-25T21:37:00+08:00</updated>
+    <id>http://vit0.com/blog/2014/12/25/ios-textview-in-cell</id>
+    <content type="html"><![CDATA[<p>这篇文章介绍了在一个动态数据的 table view 中，cell 根据 text view 内容的输入实时改变 cell 和 table view 的高度。自动计算 cell 高度的功能使用 iOS 8 才支持的自适应 cell，如果你还不知道 iOS 8 自适应 cell，可以参看这篇文章：[iOS 8 自适应 Cell]</p>
+
+<p>先上图，我们最终要实现的效果是这样的：</p>
+
+<p><img src="http://vit0.com/images/posts/2014-12-25-text-view-in-cell.gif" alt="image" /></p>
+
+<p><em>图 1：实时更新 cell 高度</em></p>
+
+<p><strong> 实现上面效果的基本原理是： </strong></p>
+
+<ol>
+<li>在 cell 中设置好 text view 的 autolayout，让 cell 可以根据内容自适应大小</li>
+<li>text view 中输入内容，根据内容更新 textView 的高度</li>
+<li>调用 tableView 的 beginUpdates 和 endUpdates，重新计算 cell 的高度</li>
+<li>将 text view 更新后的数据保存，以免 table view 滚动超过一屏再滚回来 text view 中的数据又不刷新成原来的数据了。</li>
+</ol>
+
+
+<h2>功能具体实现方法</h2>
+
+<p>新建一个项目，拉出 TableViewController，在 cell 上添加一个 UITextView。</p>
+
+<p>首先设置 text view 的 autolayout，比较关键的 constraint 是要设置 textView 的高度<strong>大于等于</strong>一个值。如图：</p>
+
+<p><img src="http://vit0.com/images/posts/2014-12-25-autolayout-setting.jpg" alt="image" /></p>
+
+<p><em>图 2： Text view 的 autolayout 设置</em></p>
+
+<p>然后，设置 UITextView 的 scrollEnable 为 NO。这一点很关键，如果不设置为 NO，UITextView  在内容超出 frame 后，重新设置 text view 的高度会失效，并出现滚动条。</p>
+
+<p><img src="http://vit0.com/images/posts/2014-12-25-uncheck-scroll-enable.jpg" alt="image" /></p>
+
+<p><em>图 3：去掉 scrolling enable 勾选</em></p>
+
+<p>根据刚才在 storyboard 中创建的 cell，新建一个 UITableViewCell 类。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;UIKit/UIKit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">TextViewCell</span> : <span class="bp">UITableViewCell</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="bp">UITextView</span> <span class="o">*</span><span class="n">textView</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>创建 TableViewController 并初始化一些数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;TableViewController.h&quot;</span>
+</span><span class='line'><span class="cp">#import &quot;TextViewCell.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">TableViewController</span> <span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">TableViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//  支持自适应 cell</span>
+</span><span class='line'>  <span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">estimatedRowHeight</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+</span><span class='line'>  <span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">rowHeight</span> <span class="o">=</span> <span class="n">UITableViewAutomaticDimension</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="l">@[</span><span class="s">@&quot;Cell 1 &quot;</span><span class="p">,</span> <span class="s">@&quot;Cell 2&quot;</span><span class="p">,</span> <span class="s">@&quot;Cell 3&quot;</span><span class="p">,</span> <span class="s">@&quot;Cell 4&quot;</span><span class="p">,</span> <span class="s">@&quot;Cell 5&quot;</span><span class="p">,</span> <span class="s">@&quot;Cell 6&quot;</span><span class="p">,</span> <span class="s">@&quot;Cell 7&quot;</span><span class="p">,</span> <span class="s">@&quot;Cell 8&quot;</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#pragma mark - Table view data source</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">numberOfRowsInSection:</span><span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nv">section</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">data</span> <span class="n">count</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">cellForRowAtIndexPath:</span><span class="p">(</span><span class="bp">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">TextViewCell</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="p">[</span><span class="n">tableView</span> <span class="nl">dequeueReusableCellWithIdentifier</span><span class="p">:</span><span class="s">@&quot;TextViewCell&quot;</span> <span class="nl">forIndexPath</span><span class="p">:</span><span class="n">indexPath</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">cell</span><span class="p">.</span><span class="n">textView</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">cell</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用上面的代码项目已经可以运行了，但是 text view 还不能自动更新大小，下面来实现 text view 根据内容计算高度</p>
+
+<p>先在 storyboard 中，将 UITextView 的 delegate 设置为 cell</p>
+
+<p><img src="http://vit0.com/images/posts/2014-12-25-set-delegate.jpg" alt="image" /></p>
+
+<p><em>图 4：设置 UITextView 的 delegate 为 cell</em></p>
+
+<p>在 <code>TextViewCell.m</code> 中实现 <code>- (void)textViewDidChange:(UITextView *)textView</code>，每次 text view 内容改变的时候，就重新计算一次 text view 的大小，并让 table view 更新高度。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;TextViewCell.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">TextViewCell</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">textViewDidChange:</span><span class="p">(</span><span class="bp">UITextView</span> <span class="o">*</span><span class="p">)</span><span class="nv">textView</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="bp">CGRect</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">textView</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 计算 text view 的高度</span>
+</span><span class='line'>  <span class="bp">CGSize</span> <span class="n">maxSize</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">CGFLOAT_MAX</span><span class="p">);</span>
+</span><span class='line'>  <span class="bp">CGSize</span> <span class="n">newSize</span> <span class="o">=</span> <span class="p">[</span><span class="n">textView</span> <span class="nl">sizeThatFits</span><span class="p">:</span><span class="n">maxSize</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">bounds</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">newSize</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">textView</span><span class="p">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 让 table view 重新计算高度</span>
+</span><span class='line'>  <span class="bp">UITableView</span> <span class="o">*</span><span class="n">tableView</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">tableView</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">tableView</span> <span class="n">beginUpdates</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">tableView</span> <span class="n">endUpdates</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nf">tableView</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="bp">UIView</span> <span class="o">*</span><span class="n">tableView</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">superview</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">tableView</span> <span class="nl">isKindOfClass</span><span class="p">:[</span><span class="bp">UITableView</span> <span class="k">class</span><span class="p">]]</span> <span class="o">&amp;&amp;</span> <span class="n">tableView</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">tableView</span> <span class="o">=</span> <span class="n">tableView</span><span class="p">.</span><span class="n">superview</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="n">tableView</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就已经实现了 text view 改变内容自动更新 cell 高度的功能，这篇文章没有涉及到计算 cell 高度的代码，因为计算 cell 高度的工作全部交给 iOS 8 的 autolayout 自动计算了，这让我们少写了许多令人痛苦的代码。</p>
+
+<p><strong>最后：</strong>为了防止 table view 过长，导致滚动后重新加载 cell，会让 text view 中的内容还原的问题，我们应该在更新了 text view 的内容之后保存数据。（如果是在编辑状态下，还需要考虑取消编辑后的回滚功能。 普通数组数据，可以保存一个原始数据的副本，如果用户取消编辑，就设置 data 为原始数据的副本。如果是 NSManagedObject 对象可以使用 NSUndoManage，不过这些已经超出本篇文章的内容范围了。）</p>
+
+<p>为了在 text view 更新后能让 TableViewController 中的 data 更新，需要为 cell 添加一个 delegate，在 text view 更新后调用 delegate，TableViewController 中收到 delegate 信息后更新 data。</p>
+
+<p>修改后的 <code>TextViewCell.h</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;UIKit/UIKit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@protocol</span> <span class="nc">TextViewCellDelegate</span>;
+</span><span class='line'>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">TextViewCell</span> : <span class="bp">UITableViewCell</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="bp">UITextView</span> <span class="o">*</span><span class="n">textView</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">id</span><span class="o">&lt;</span><span class="n">TextViewCellDelegate</span><span class="o">&gt;</span> <span class="n">delegate</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@protocol</span> <span class="nc">TextViewCellDelegate</span> <span class="o">&lt;</span><span class="bp">NSObject</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">textViewCell</span><span class="p">:(</span><span class="n">TextViewCell</span> <span class="o">*</span><span class="p">)</span><span class="n">cell</span> <span class="nl">didChangeText</span><span class="p">:(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">text</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在 <code>TextView.m</code>的 <code>- (void)textViewDidChange:(UITextView *)textView</code>  中添加 delegate 的调用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">textViewDidChange:</span><span class="p">(</span><span class="bp">UITextView</span> <span class="o">*</span><span class="p">)</span><span class="nv">textView</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">([</span><span class="nb">self</span><span class="p">.</span><span class="n">delegate</span> <span class="nl">respondsToSelector</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">textViewCell</span><span class="p">:</span><span class="nl">didChangeText</span><span class="p">:)])</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">delegate</span> <span class="nl">textViewCell</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didChangeText</span><span class="p">:</span><span class="n">textView</span><span class="p">.</span><span class="n">text</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 计算 text view 的高度</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="c1">// 让 table view 重新计算高度</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后在 <code>TableViewController.m</code> 的最后实现 <code>TextViewCellDelegate</code> 的方法，更新 data</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#pragma mark - TextViewCellDelegate</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">textViewCell:</span><span class="p">(</span><span class="n">TextViewCell</span> <span class="o">*</span><span class="p">)</span><span class="nv">cell</span> <span class="nf">didChangeText:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">text</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="bp">NSIndexPath</span> <span class="o">*</span><span class="n">indexPath</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="nl">indexPathForCell</span><span class="p">:</span><span class="n">cell</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="bp">NSMutableArray</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">data</span> <span class="n">mutableCopy</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">data</span><span class="p">[</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span><span class="p">;</span>
+</span><span class='line'>  <span class="nb">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span> <span class="k">copy</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>总结</h2>
+
+<p>从最后的代码量来看，这个功能在实现上并不难。只要记住的几点：</p>
+
+<ol>
+<li>使用 iOS 8 的特性自动计算 cell 高度，或者在 heightForRow 中自己实现计算高度的代码。</li>
+<li>UITextView 的 scrollEnable 要设置 NO</li>
+<li>更新 table view 的高度使用 beginUpdates 和 endUpdates</li>
+<li>Text view 更新内容后要保存数据，以免重新加载 cell 时数据丢失</li>
+</ol>
+
+
+<h2>参考</h2>
+
+<ul>
+<li>[<a href="https://pontifex.azurewebsites.net/self-sizing-uitableviewcell-with-uitextview-in-ios-8/">https://pontifex.azurewebsites.net/self-sizing-uitableviewcell-with-uitextview-in-ios-8/</a>]</li>
+<li>[<a href="http://stackoverflow.com/questions/50467/how-do-i-size-a-uitextview-to-its-content/26599389#26599389">http://stackoverflow.com/questions/50467/how-do-i-size-a-uitextview-to-its-content/26599389#26599389</a>]</li>
+<li>[<a href="http://stackoverflow.com/questions/18368567/uitableviewcell-with-uitextview-height-in-ios-7">http://stackoverflow.com/questions/18368567/uitableviewcell-with-uitextview-height-in-ios-7</a>]</li>
+<li>[<a href="http://stackoverflow.com/questions/460014/can-you-animate-a-height-change-on-a-uitableviewcell-when-selected">http://stackoverflow.com/questions/460014/can-you-animate-a-height-change-on-a-uitableviewcell-when-selected</a>]</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS 8 自适应 Cell]]></title>
