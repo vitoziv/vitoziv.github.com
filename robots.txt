@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /resume.html
-
-Sitemap: http://vit0.com/sitemap.xml 
